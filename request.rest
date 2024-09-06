@@ -1,0 +1,43 @@
+GET http://localhost:5000/users
+
+###
+GET http://localhost:5000/settingweb
+
+###
+GET http://localhost:5000/tipe
+
+###
+GET http://localhost:5000/kategori
+
+###
+GET http://localhost:5000/kategori/mobile-legends
+
+###
+GET http://localhost:5000/kategori/populer
+
+###
+GET http://localhost:5000/kategoribytipe
+
+###
+GET http://localhost:5000/kategori/services
+
+###
+GET http://localhost:5000/layanan
+
+###
+GET http://localhost:5000/berita/swiper
+
+###
+GET http://localhost:5000/pembelianforcektransaksi
+
+###
+GET http://localhost:5000/pembelian
+
+###
+GET http://localhost:5000/method
+
+###
+GET http://localhost:5000/rating
+
+###
+GET http://localhost:5000/rating/mobile-legends

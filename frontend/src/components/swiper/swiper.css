@@ -1,0 +1,27 @@
+/* .swiper_container {
+  height: 15rem;
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+  position: relative;
+} */
+
+.swiper-slide {
+  width: 50rem;
+  height: auto;
+  position: relative;
+}
+
+.swiper-slide img {
+  width: auto;
+  height: auto;
+  border-radius: 2rem;
+  object-fit: cover;
+}
+
+.slider-controler {
+  position: relative;
+  bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
