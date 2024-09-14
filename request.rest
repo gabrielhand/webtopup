@@ -41,3 +41,30 @@ GET http://localhost:5000/rating
 
 ###
 GET http://localhost:5000/rating/mobile-legends
+
+###
+//Add User
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+    "name": "testadmin",
+    "username": "testadmin",
+    "password": "testadmin",
+    "whatsapp": "080808808"
+}
+
+###
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+    "username": "testadmin",
+    "password": "testadmin"
+}
+
+###
+GET http://localhost:5000/me
+
+###
+DELETE http://localhost:5000/logout

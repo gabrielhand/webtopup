@@ -85,7 +85,7 @@ const AllGames = () => {
           </div>
         ))}
       </div>
-      <div className="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-4 gap-x-3">
+      <div className="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-4 gap-3">
         {filteredKategori.map((kategori, index) => (
           <Link to={`/order/${kategori.kode}`}
             key={kategori.kode}

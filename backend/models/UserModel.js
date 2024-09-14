@@ -8,17 +8,23 @@ const User = db.define('users', {
     username: {
         type: Sequelize.STRING
     },
+    password: {
+        type: Sequelize.STRING
+    },
     whatsapp: {
         type: Sequelize.STRING
     },
     image: {
         type: Sequelize.STRING
     },
-    balance: {
-        type: Sequelize.ENUM('Member', 'Gold', 'Platinum', 'Admin')
+    filename: {
+        type: Sequelize.STRING
     },
     role: {
-        type: Sequelize.STRING
+        type: Sequelize.ENUM('Member', 'Gold', 'Platinum', 'Admin')
+    },
+    balance: {
+        type: Sequelize.BIGINT
     },
     api_key: {
         type: Sequelize.STRING

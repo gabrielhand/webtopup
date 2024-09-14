@@ -5,9 +5,10 @@ import AllGames from "./page/allgames/AllGames";
 import CekTransaksi from "./page/cek/CekTransaksi";
 import Services from "./page/services/Services";
 import Order from "./page/order/Order";
-import MainLoginRegister from "./page/authentication/Main";
+import MainLoginRegister from "./page/authentication/MainLoginRegister";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Me from "./page/me/Me";
 
 const router = (settingweb, isDarkMode, toggleDarkMode) =>
   createBrowserRouter([
@@ -40,6 +41,10 @@ const router = (settingweb, isDarkMode, toggleDarkMode) =>
           path: "/order/:kode",
           element: <Order />,
         },
+        {
+          path: "/me",
+          element: <Me />,
+        },
       ],
     },
     {
@@ -48,16 +53,10 @@ const router = (settingweb, isDarkMode, toggleDarkMode) =>
         <MainLoginRegister settingweb={settingweb} isDarkMode={isDarkMode} />
       ),
     },
-    {
-      path: "/register",
-      element: (
-        <MainLoginRegister settingweb={settingweb} isDarkMode={isDarkMode} />
-      ),
-    },
   ]);
 
 function App() {
-  const [settingweb, setSettingWeb] = useState([]);
+  const [settingweb, setSettingWeb] = useState({});
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   const getSettingWeb = async () => {

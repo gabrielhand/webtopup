@@ -1,10 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
-// import { useState } from "react";
 import "../../index.css";
 import { useState } from "react";
 
-const Navbar = ({ isDarkMode, toggleDarkMode }) => {
+const Navbar = ({ isDarkMode, toggleDarkMode, user, logOut, logoHeader }) => {
   const location = useLocation();
 
   const [isMenuVisible, setIsMenuVisible] = useState(false);
@@ -18,7 +17,7 @@ const Navbar = ({ isDarkMode, toggleDarkMode }) => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/85 backdrop-blur dark:bg-[#161721]/85 flex flex-row gap-x-4 px-8 items-center w-full h-14 border border-x-0 border-b dark:border-b-zinc-800">
+    <header className="sticky top-0 z-50 bg-white/85 backdrop-blur dark:bg-[#161721]/85 flex flex-row gap-x-4 px-8 items-center w-full h-14 border border-x-0 border-b dark:border-b-zinc-800 shadow-md">
       <div className="flex-1 flex flex-row gap-4 justify-start">
         <div className="flex flex-row items-center lg:hidden md:hidden hover:text-white/80 hover:duration-300">
           <svg
@@ -36,9 +35,16 @@ const Navbar = ({ isDarkMode, toggleDarkMode }) => {
           </svg>
         </div>
         <Link to="/">
-          <figure className="py-3">
-            <img id="logoNavbar" src="" alt="" className="w-14 h-8" />
-          </figure>
+          {logoHeader ? (
+            <figure className="py-3">
+              <img
+                id="logoNavbar"
+                src={logoHeader}
+                alt=""
+                className="w-14 h-8"
+              />
+            </figure>
+          ) : null}
         </Link>
       </div>
       <div className="lg:hidden md:hidden flex flex-row justify-center item-center w-full">
@@ -200,43 +206,140 @@ const Navbar = ({ isDarkMode, toggleDarkMode }) => {
             <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"></path>
           </svg>
         </label>
-        <div className="hidden lg:flex md:flex flex-row gap-x-2">
-          <Link
-            to="/register"
-            className="bg-[#4169e1] hover:bg-[#4169e1]/70 hover:duration-300 px-4 py-1.5 rounded-md cursor-pointer"
-          >
-            <p className="text-white text-sm font-medium">Daftar</p>
-          </Link>
-          <Link
-            to="/login"
-            className="hover:bg-slate-100 border dark:border-zinc-800 hover:duration-300 dark:hover:bg-zinc-800/50 px-4 py-1.5 rounded-md cursor-pointer"
-          >
-            <p className="text-black dark:text-white text-sm font-medium">
-              Masuk
-            </p>
-          </Link>
+        {user ? (
           <div
-            id="btn-menu-nav"
-            onClick={toggleMenu}
-            className="border text-[#4169e1] dark:border-zinc-800 hover:duration-300 px-4 py-1.5 rounded-md cursor-pointer"
+            id="HasLoginSection"
+            className="hidden lg:flex md:flex flex-row gap-x-2"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-grid-fill"
-              viewBox="0 0 16 16"
+            <div
+              onClick={toggleMenu}
+              className="flex flex-row aspect-square rounded-full w-9 ring-1 ring-[#4169e1] overflow-hidden cursor-pointer"
             >
-              <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5z" />
-            </svg>
+              <img
+                src={user.image}
+                alt={`Image-${user.username}`}
+                className="object-cover"
+              />
+            </div>
           </div>
+        ) : (
           <div
-            id="menu-nav"
-            className={`absolute right-4 mt-12 shadow-md border dark:border-none bg-white dark:bg-[#35353d] rounded-xl w-72 transition-opacity duration-300 ${
-              isMenuVisible ? "opacity-100" : "opacity-0 hidden"
-            }`}
+            id="NotLoginSection"
+            className="hidden lg:flex md:flex flex-row gap-x-2"
           >
+            <Link
+              to="/login"
+              className="bg-[#4169e1] hover:bg-[#4169e1]/70 hover:duration-300 px-4 py-1.5 rounded-md cursor-pointer"
+            >
+              <p className="text-white text-sm font-medium">Daftar</p>
+            </Link>
+            <Link
+              to="/login"
+              className="hover:bg-slate-100 border dark:border-zinc-800 hover:duration-300 dark:hover:bg-zinc-800/50 px-4 py-1.5 rounded-md cursor-pointer"
+            >
+              <p className="text-black dark:text-white text-sm font-medium">
+                Masuk
+              </p>
+            </Link>
+            <div
+              id="btn-menu-nav"
+              onClick={toggleMenu}
+              className="border text-[#4169e1] dark:border-zinc-800 hover:duration-300 px-4 py-1.5 rounded-md cursor-pointer"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-grid-fill"
+                viewBox="0 0 16 16"
+              >
+                <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5z" />
+              </svg>
+            </div>
+          </div>
+        )}
+        <div
+          id="menu-nav"
+          className={`absolute right-4 mt-14 shadow-md border dark:border-none bg-white dark:bg-[#2f2f36] overflow-hidden rounded-xl ${
+            user ? "w-64" : "w-72"
+          } transition-opacity duration-300 ${
+            isMenuVisible ? "opacity-100" : "opacity-0 hidden"
+          }`}
+        >
+          {user ? (
+            <div className="flex flex-col">
+              <Link
+                to="/me"
+                onClick={toggleMenu}
+                className="flex flex-col justify-end text-end cursor-pointer py-2 px-3 border-b border-zinc-400 dark:border-black hover:bg-base-300 dark:hover:bg-zinc-700 hover:duration-300"
+              >
+                <p className="text-lg text-slate-700 dark:text-white font-medium">
+                  {user.username}
+                </p>
+                <p className="text-sm text-slate-700 dark:text-gray-300 font-light">
+                  {user.role}
+                </p>
+              </Link>
+              <div className="flex flex-col px-3 py-2 border-b border-zinc-400 dark:border-black">
+                <p className="text-xs text-gray-500 dark:text-gray-400 font-light">
+                  Saldo kamu
+                </p>
+                <p className="text-lg text-slate-700 dark:text-white font-medium">
+                  Rp{" "}
+                  {user.balance.toLocaleString("id-ID", {
+                    styles: "currency",
+                    currency: "IDR",
+                  })}
+                </p>
+              </div>
+              <Link
+                to="/dashboard"
+                onClick={toggleMenu}
+                className={`${
+                  user.role === "Admin" ? "flex" : "hidden"
+                } flex-row items-center gap-x-4 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 px-3 py-2 text-black dark:text-white hover:duration-300 cursor-pointer mx-2 mt-2`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-grid-1x2"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M6 1H1v14h5zm9 0h-5v5h5zm0 9v5h-5v-5zM0 1a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm9 0a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1zm1 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1z" />
+                </svg>
+                Dashboard
+              </Link>
+              <div
+                onClick={() => {
+                  logOut();
+                  toggleMenu();
+                }}
+                className="flex flex-row items-center gap-x-4 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 px-3 py-2 mx-2 mb-2 mt-2 text-black dark:text-white hover:duration-300 cursor-pointer"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-box-arrow-right"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"
+                  />
+                  <path
+                    fillRule="evenodd"
+                    d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"
+                  />
+                </svg>
+                Logout
+              </div>
+            </div>
+          ) : (
             <div className="flex flex-col gap-y-2 px-5 py-4">
               <Link
                 to="/services"
@@ -286,18 +389,18 @@ const Navbar = ({ isDarkMode, toggleDarkMode }) => {
                 </svg>
                 Cari Game...
                 {/* <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  fill="currentColor"
-                  className="bi bi-arrow-right-short ml-auto"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"
-                  />
-                </svg> */}
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                fill="currentColor"
+                className="bi bi-arrow-right-short ml-auto"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"
+                />
+              </svg> */}
               </button>
               {/* You can open the modal using document.getElementById('ID').showModal() method */}
               <div className="flex flex-row cursor-pointer py-3 px-5 rounded-lg hover:bg-base-300 dark:hover:bg-zinc-700 duration-500 items-center gap-x-4 text-black dark:text-white text-sm font-medium">
@@ -358,7 +461,7 @@ const Navbar = ({ isDarkMode, toggleDarkMode }) => {
                 </svg>
               </Link>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </header>
@@ -366,8 +469,16 @@ const Navbar = ({ isDarkMode, toggleDarkMode }) => {
 };
 
 Navbar.propTypes = {
+  user: PropTypes.shape({
+    username: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired,
+    balance: PropTypes.number.isRequired,
+  }),
   isDarkMode: PropTypes.bool.isRequired,
   toggleDarkMode: PropTypes.func.isRequired,
+  logOut: PropTypes.func.isRequired,
+  logoHeader: PropTypes.string,
 };
 
 export default Navbar;

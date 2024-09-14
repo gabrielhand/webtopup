@@ -1,5 +1,4 @@
 // import { Link } from "react-router-dom";
-
 import AllGames from "../../components/allgames/AllGames";
 import BestSeller from "../../components/bestseller/BestSeller";
 import Swiper from "../../components/swiper/Swiper";
