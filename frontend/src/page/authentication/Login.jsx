@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { LoginUser, reset } from "../../features/authSlices";
+import { LoginUser, getMe, reset } from "../../features/authSlices";
 
 const Login = ({ logoHeader }) => {
   const [username, setUsername] = useState("");
@@ -13,6 +13,10 @@ const Login = ({ logoHeader }) => {
   );
 
   useEffect(() => {
+    dispatch(getMe());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (user || isSuccess) {
       setTimeout(() => {
         navigate("/me");
@@ -22,6 +26,8 @@ const Login = ({ logoHeader }) => {
       }, 2000);
     }
   }, [user, isSuccess, dispatch, navigate]);
+
+
 
   const Auth = (e) => {
     e.preventDefault();
@@ -56,7 +62,7 @@ const Login = ({ logoHeader }) => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Masukkan username kamu..."
-                className="flex flex-row text-black px-4 py-2.5 rounded-xl bg-white focus:outline-none cursor-pointer placeholder:text-zinc-400"
+                className="flex flex-row text-black px-4 py-2.5 rounded-md bg-gray-200 dark:bg-white focus:outline-none cursor-pointer placeholder:text-zinc-400"
               />
             </div>
             <div className="flex flex-col w-full gap-y-2">
@@ -71,7 +77,7 @@ const Login = ({ logoHeader }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Masukkan password kamu..."
-                  className="flex flex-row w-full text-black px-4 py-2.5 rounded-xl dark:bg-white focus:outline-none cursor-pointer placeholder:text-zinc-400"
+                  className="flex flex-row w-full text-black px-4 py-2.5 rounded-md bg-gray-200 dark:bg-white focus:outline-none cursor-pointer placeholder:text-zinc-400"
                 />
                 <div className="relative">
                   <svg

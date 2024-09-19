@@ -4,6 +4,7 @@ import Kategori from "../models/KategoriModel.js";
 import { Layanan, Tipe } from "../config/relations.js";
 import SubKategori from "../models/SubKategoriModel.js";
 import LayananModel from "../models/LayananModel.js";
+import User from "../models/UserModel.js";
 
 export const getKategori = async (req, res) => {
   try {
@@ -121,7 +122,7 @@ export const getKategoriByKode = async (req, res) => {
 
     let subkategori = await SubKategori.findAll({
       where: { category_id: data.id },
-      attributes: ["sub_logo", "id","category_id", "code", "name", "active"],
+      attributes: ["sub_logo", "id", "category_id", "code", "name", "active"],
     });
 
     const normalSubCategory = {
@@ -133,7 +134,12 @@ export const getKategoriByKode = async (req, res) => {
     };
     subkategori = [...subkategori, normalSubCategory];
 
-    let role = req.user ? req.user.role : "Guest";
+    const user = await User.findOne({
+      where: { id: req.session.userId },
+      attributes: ["role"],
+    });
+
+    let role = user ? user.role : "Member";
     let priceColumn;
 
     switch (role) {

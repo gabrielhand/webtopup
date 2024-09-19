@@ -1,10 +1,14 @@
 import User from "../models/UserModel.js";
 import argon2 from "argon2";
-import { log } from "console";
 import crypto from "crypto";
 import path from "path";
 import fs from "fs";
-import { Layanan, Pembelian, Kategori } from "../config/relations.js";
+import {
+  Layanan,
+  Pembelian,
+  Kategori,
+  SubKategori,
+} from "../config/relations.js";
 import db from "../config/database.js";
 
 export const getUsers = async (req, res) => {
@@ -90,16 +94,27 @@ export const updateUser = async (req, res) => {
     });
   }
 
-  const username = req.body.username;
+  const { nama, username, nomorwa } = req.body;
   const url = `${req.protocol}://${req.get("host")}/assets/profile/${fileName}`;
   try {
     await User.update(
-      { username: username, image: url, filename: fileName },
+      {
+        name: nama,
+        username: username,
+        whatsapp: nomorwa,
+        image: url,
+        filename: fileName,
+      },
       {
         where: {
           id: req.params.id,
         },
       }
+    );
+
+    await Pembelian.update(
+      { username: username },
+      { where: { username: user.username } }
     );
     res.status(200).json({ msg: "Berhasil mengedit data user!" });
   } catch (error) {
@@ -154,7 +169,7 @@ export const updatePasswordUser = async (req, res) => {
   }
 };
 
-export const getPembelianByUser = async (req, res) => {
+export const getLimaPembelianByUser = async (req, res) => {
   try {
     const pembelian = await Pembelian.findAll({
       include: [
@@ -171,7 +186,7 @@ export const getPembelianByUser = async (req, res) => {
         },
       ],
       where: {
-        username: req.session.username,
+        username: req.params.username,
       },
       order: [["created_at", "DESC"]],
       limit: 5,
@@ -181,6 +196,97 @@ export const getPembelianByUser = async (req, res) => {
     res.status(200).json(pembelian);
   } catch (error) {
     res.status(500).json({ msg: error.message });
+  }
+};
+
+export const getStatusAllPembelianByUser = async (req, res) => {
+  try {
+    const username = req.params.username;
+
+    const banyakPembelianSuccess = await Pembelian.count({
+      where: {
+        username: username,
+        status: "Success",
+      },
+    });
+
+    const banyakPembelianBatal = await Pembelian.count({
+      where: {
+        username: username,
+        status: "Batal",
+      },
+    });
+
+    const banyakPembelianPending = await Pembelian.count({
+      where: {
+        username: username,
+        status: "Pending",
+      },
+    });
+
+    res.status(200).json({
+      banyakPembelianSuccess,
+      banyakPembelianBatal,
+      banyakPembelianPending,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getRiwayatPembelianByUser = async (req, res) => {
+  try {
+    const username = req.params.username;
+    const { page = 1, limit = 10, order_id, status } = req.query;
+
+    const whereCondition = { username };
+
+    if (order_id) {
+      whereCondition.order_id = order_id;
+    }
+
+    if (status) {
+      whereCondition.status = status;
+    }
+
+    const pembelian = await Pembelian.findAndCountAll({
+      include: [
+        {
+          model: Layanan,
+          as: "layananDetail",
+          include: [
+            {
+              model: Kategori,
+              attributes: ["nama"],
+            },
+          ],
+        },
+        {
+          model: SubKategori,
+          as: "layananSubKat",
+          required: false,
+          include: [
+            {
+              model: Kategori,
+              attributes: ["nama"],
+            },
+          ],
+        },
+      ],
+      where: whereCondition,
+      order: [["created_at", "DESC"]],
+      limit: parseInt(limit),
+      offset: (page - 1) * limit,
+    });
+
+    res.status(200).json({
+      totalItems: pembelian.count,
+      totalPage: Math.ceil(pembelian.count / limit),
+      currentPage: parseInt(page),
+      pembelian: pembelian.rows,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 

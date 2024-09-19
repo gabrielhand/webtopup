@@ -25,6 +25,14 @@ GET http://localhost:5000/kategori/services
 GET http://localhost:5000/layanan
 
 ###
+POST http://localhost:5000/layanan/price
+Content-Type: application/json
+
+{
+    "nominal": 3763
+}
+
+###
 GET http://localhost:5000/berita/swiper
 
 ###

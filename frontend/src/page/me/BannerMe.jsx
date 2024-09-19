@@ -24,7 +24,7 @@ const BannerMe = ({ user }) => {
         <div className="flex flex-row w-full lg:gap-x-6 md:gap-x-6 gap-x-3">
           <div>
             {user ? (
-              <div className="relative aspect-square rounded-full bg-white overflow-hidden flex lg:flex-none md:flex-none flex-none z-20 -top-14 md:w-44 w-32 h-full">
+              <div className="relative aspect-square rounded-full bg-white overflow-hidden flex lg:flex-none md:flex-none flex-none z-20 -top-14 lg:w-36 w-32">
                 <img
                   src={user.image ? user.image : "https://picsum.photos/200"}
                   alt={`Gambar-${user.username}`}
@@ -46,26 +46,20 @@ const BannerMe = ({ user }) => {
               </div>
             )}
           </div>
-          <div className="flex flex-col gap-y-3 justify-start items-start py-3">
+          <div className="flex flex-col gap-y-2 justify-start items-start py-3">
             <p className="lg:text-3xl md:text-2xl text-xl font-semibold">
               {user.username}
             </p>
-            <div className="lg:text-base md:text-base text-sm font-light px-4 py-2 text-blue-500 border border-blue-500 rounded-xl">
+            <div className="lg:text-base md:text-base text-sm font-light lg:px-4 px-3 py-1.5 text-yellow-500 border border-yellow-500 rounded-lg">
               {user.role}
             </div>
           </div>
           <div className="flex flex-col w-full justify-center items-end">
-            <div className="flex flex-col justify-between gap-1 rounded-xl bg-gradient-to-bl from-white to-yellow-500 p-3 min-w-44 min-h-24">
-              <div className="flex flex-row justify-end">
-                <div className="flex-1 text-zinc-800 text-xs mr-2">
-                  Saldo kamu
-                </div>
-                <div className="bg-red-600/50 rounded-full p-3 -mr-2"></div>
-                <div className="bg-orange-600/50 rounded-full p-3"></div>
-              </div>
-              <div className="flex flex-row gap-1">
-                <p className="text-sm text-black font-medium">Rp </p>
-                <div className="lg:text-3xl md:text-2xl text-xl text-black font-medium mr-4">
+            <div className="flex flex-col gap-y-3">
+              <p className="flex flex-row justify-end text-xs text-zinc-300">Saldo Kamu</p>
+              <div className="flex flex-row justify-between gap-1">
+                <p className="lg:text-sm text-xs text-white font-medium">Rp </p>
+                <div className="lg:text-3xl md:text-2xl text-xl text-white font-medium">
                   {user.balance.toLocaleString("id-ID", {
                     styles: "currency",
                     currency: "IDR",

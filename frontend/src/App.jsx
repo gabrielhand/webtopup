@@ -9,6 +9,9 @@ import MainLoginRegister from "./page/authentication/MainLoginRegister";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Me from "./page/me/Me";
+import MainDashboardUser from "./page/me/MainDashboardUser";
+import RiwayatPesanan from "./page/me/RiwayatPesanan";
+import Dashboard from "./admin/page/Dashboard";
 
 const router = (settingweb, isDarkMode, toggleDarkMode) =>
   createBrowserRouter([
@@ -42,8 +45,17 @@ const router = (settingweb, isDarkMode, toggleDarkMode) =>
           element: <Order />,
         },
         {
-          path: "/me",
-          element: <Me />,
+          element: <MainDashboardUser />,
+          children: [
+            {
+              path: "/me",
+              element: <Me />,
+            },
+            {
+              path: "/riwayat",
+              element: <RiwayatPesanan />,
+            },
+          ],
         },
       ],
     },
@@ -51,6 +63,12 @@ const router = (settingweb, isDarkMode, toggleDarkMode) =>
       path: "/login",
       element: (
         <MainLoginRegister settingweb={settingweb} isDarkMode={isDarkMode} />
+      ),
+    },
+    {
+      path: "/dashboard",
+      element: (
+        <Dashboard />
       ),
     },
   ]);

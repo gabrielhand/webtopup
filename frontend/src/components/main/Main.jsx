@@ -6,7 +6,7 @@ import NProgress from "nprogress";
 import ModalSearch from "../navbar/ModalSearch";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { LogoutUser, reset } from "../../features/authSlices";
+import { getMe, LogoutUser, reset } from "../../features/authSlices";
 
 const smoothScrollTo = (x, y, duration) => {
   const start = window.scrollY;
@@ -33,6 +33,10 @@ const Main = ({ settingweb, isDarkMode, toggleDarkMode }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
+  
+  useEffect(() => {
+    dispatch(getMe())
+  }, [dispatch]);
 
   useEffect(() => {
     NProgress.start();

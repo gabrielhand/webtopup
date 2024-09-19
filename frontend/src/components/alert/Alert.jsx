@@ -71,7 +71,9 @@ Alert.propTypes = {
   status: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
   bg: PropTypes.string.isRequired,
+  bgIcon: PropTypes.string.isRequired,
   border: PropTypes.string.isRequired,
+  textColor: PropTypes.string.isRequired,
   closeAlert: PropTypes.func.isRequired,
 };
 

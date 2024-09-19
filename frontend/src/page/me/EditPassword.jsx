@@ -32,18 +32,18 @@ const EditPassword = ({ setStatusAlert, setMsg }) => {
       );
 
       const { msg } = response.data;
+      setPasswordLama("");
+      setPasswordBaru("");
       setStatusAlert("Sukses");
       setMsg(msg);
 
       dispatch(getMe());
     } catch (error) {
       if (error.response) {
+        setPasswordLama("");
+        setPasswordBaru("");
         setStatusAlert("Gagal");
         setMsg(error.response.data.msg);
-      } else if (error.request) {
-        console.log(error.request);
-      } else {
-        console.log("Error", error.message);
       }
     }
   };
@@ -121,7 +121,7 @@ const EditPassword = ({ setStatusAlert, setMsg }) => {
               }`}
             ></span>
           </div>
-        </div> */}
+          </div> */}
           <div className="flex flex-row justify-end">
             <button
               type="submit"
@@ -134,6 +134,11 @@ const EditPassword = ({ setStatusAlert, setMsg }) => {
       </form>
     </div>
   );
+};
+
+EditPassword.propTypes = {
+  setStatusAlert: PropTypes.func,
+  setMsg: PropTypes.func,
 };
 
 export default EditPassword;

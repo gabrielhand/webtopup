@@ -213,10 +213,12 @@ const MainLoginRegister = ({ settingweb, isDarkMode }) => {
         }`}
       >
         <Alert
-          status="Success"
+          status="Sukses"
           message="Berhasil Login!"
           bg="bg-emerald-50"
+          bgIcon="bg-emerald-400"
           border="border-emerald-400"
+          textColor="text-emerald-400"
           closeAlert={closeAlert}
         />
       </div>

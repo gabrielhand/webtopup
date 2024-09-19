@@ -3,16 +3,20 @@ import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import GopayImage from "../../assets/gopay_image.png";
 
-const MetodePembayaran = ({ methods }) => {
+const MetodePembayaran = ({ methods, totalPrice, isDisabled }) => {
   const eMoneyMetode = methods.filter((method) => method.tipe === "e-walet");
-  const vAccountMetode = methods.filter((method) => method.tipe === "virtual-account");
-  const cStoreMetode = methods.filter((method) => method.tipe === "convenience-store");
+  const vAccountMetode = methods.filter(
+    (method) => method.tipe === "virtual-account"
+  );
+  const cStoreMetode = methods.filter(
+    (method) => method.tipe === "convenience-store"
+  );
 
   const [isEMoneyOpen, setIsMetOpen] = useState(false);
   const [isVaOpen, setIsVaOpen] = useState(false);
   const [isCsOpen, setIsCsOpen] = useState(false);
   const [isSaldoOpen, setIsSaldoOpen] = useState(false);
-  
+
   const { logoHeader } = useOutletContext();
 
   const toggleEMoney = () => {
@@ -37,7 +41,11 @@ const MetodePembayaran = ({ methods }) => {
         <div className="flex flex-row justify-between bg-[#4169e1] rounded-xl w-full overflow-visible">
           <p className="text-white font-medium px-5 py-3">Metode Pembayaran</p>
           <figure className="relative">
-            <img src={GopayImage} alt="Gopay-Image" className="absolute lg:right-6 right-8 -top-2 max-w-16 max-h-16" />
+            <img
+              src={GopayImage}
+              alt="Gopay-Image"
+              className="absolute lg:right-6 right-8 -top-2 max-w-16 max-h-16"
+            />
           </figure>
         </div>
       </div>
@@ -52,7 +60,8 @@ const MetodePembayaran = ({ methods }) => {
         >
           <button
             onClick={toggleEMoney}
-            className="flex flex-row w-full items-center justify-between px-4 py-3 text-black font-medium rounded-b-xl bg-slate-200 dark:bg-zinc-300"
+            disabled={isDisabled}
+            className="flex flex-row w-full items-center justify-between px-4 py-3 text-black font-medium rounded-b-xl bg-slate-200 dark:bg-zinc-300 disabled:brightness-75"
           >
             <p>E-Money</p>
             <svg
@@ -88,7 +97,7 @@ const MetodePembayaran = ({ methods }) => {
                     id={`method-${emethod.id}-price`}
                     className="price GOPAY text-lg text-black font-medium"
                   >
-                    Rp
+                    Rp {totalPrice.toLocaleString("id-ID")}
                   </div>
                   {/* <hr className="border border-black" /> */}
                 </div>
@@ -112,7 +121,8 @@ const MetodePembayaran = ({ methods }) => {
         >
           <button
             onClick={toggleVa}
-            className="flex flex-row w-full items-center justify-between px-4 py-3 text-black font-medium rounded-b-xl bg-slate-200 dark:bg-zinc-300"
+            disabled={isDisabled}
+            className="flex flex-row w-full items-center justify-between px-4 py-3 text-black font-medium rounded-b-xl bg-slate-200 dark:bg-zinc-300 disabled:brightness-75"
           >
             <p>Virtual Account</p>
             <svg
@@ -148,7 +158,7 @@ const MetodePembayaran = ({ methods }) => {
                     id={`method-${vamethod.id}-price`}
                     className="price GOPAY text-lg text-black font-medium"
                   >
-                    Rp
+                    Rp {totalPrice.toLocaleString("id-ID")}
                   </div>
                   {/* <hr className="border border-black" /> */}
                 </div>
@@ -172,7 +182,8 @@ const MetodePembayaran = ({ methods }) => {
         >
           <button
             onClick={toggleCs}
-            className="flex flex-row w-full items-center justify-between px-4 py-3 text-black font-medium rounded-b-xl bg-slate-200 dark:bg-zinc-300"
+            disabled={isDisabled}
+            className="flex flex-row w-full items-center justify-between px-4 py-3 text-black font-medium rounded-b-xl bg-slate-200 dark:bg-zinc-300 disabled:brightness-75"
           >
             <p>Convenience Store</p>
             <svg
@@ -208,7 +219,7 @@ const MetodePembayaran = ({ methods }) => {
                     id={`method-${csmethod.id}-price`}
                     className="price GOPAY text-lg text-black font-medium"
                   >
-                    Rp
+                    Rp {totalPrice.toLocaleString("id-ID")}
                   </div>
                   {/* <hr className="border border-black" /> */}
                 </div>
@@ -232,7 +243,8 @@ const MetodePembayaran = ({ methods }) => {
         >
           <button
             onClick={toggleSaldo}
-            className="flex flex-row w-full items-center justify-between px-4 py-3 text-black font-medium rounded-b-xl bg-slate-200 dark:bg-zinc-300"
+            disabled={isDisabled}
+            className="flex flex-row w-full items-center justify-between px-4 py-3 text-black font-medium rounded-b-xl bg-slate-200 dark:bg-zinc-300 disabled:brightness-75"
           >
             <p>Saldo (Tanpa Biaya Admin)</p>
             <svg
@@ -249,29 +261,29 @@ const MetodePembayaran = ({ methods }) => {
             </svg>
           </button>
           <div className="flex flex-col gap-y-3 px-3">
-              <div className="flex flex-col w-full rounded-xl text-black p-2 bg-white shadow-lg">
-                <div className="flex flex-col gap-y-2 w-full">
-                  <figure className="flex flex-row justify-end w-full">
-                    <img
-                      alt={`Gambar-${import.meta.env.VITE_APP_NAME}`}
-                      loading="lazy"
-                      className="object-contain w-20 h-10"
-                      src={logoHeader}
-                    />
-                  </figure>
-                  <hr className="border border-black" />
-                  <div
-                    id={`method-saldoprice`}
-                    className="price GOPAY text-lg text-black font-medium"
-                  >
-                    Rp
-                  </div>
-                  {/* <hr className="border border-black" /> */}
+            <div className="flex flex-col w-full rounded-xl text-black p-2 bg-white shadow-lg">
+              <div className="flex flex-col gap-y-2 w-full">
+                <figure className="flex flex-row justify-end w-full">
+                  <img
+                    alt={`Gambar-${import.meta.env.VITE_APP_NAME}`}
+                    loading="lazy"
+                    className="object-contain w-20 h-10"
+                    src={logoHeader}
+                  />
+                </figure>
+                <hr className="border border-black" />
+                <div
+                  id={`method-saldoprice`}
+                  className="price GOPAY text-lg text-black font-medium"
+                >
+                  Rp {totalPrice.toLocaleString("id-ID")}
                 </div>
-                <div className="flex flex-row justify-end w-full text-sm font-light">
-                  Saldo Akun
-                </div>
+                {/* <hr className="border border-black" /> */}
               </div>
+              <div className="flex flex-row justify-end w-full text-sm font-light">
+                Saldo Akun
+              </div>
+            </div>
           </div>
           <div className="flex flex-row gap-x-2 w-full">
             <div className="grayscale-image-method grayscale relative lg:w-14 md:w-12 w-8 h-full"></div>
@@ -289,6 +301,8 @@ MetodePembayaran.propTypes = {
       name: PropTypes.string.isRequired,
     })
   ).isRequired,
+  totalPrice: PropTypes.number.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
 };
 
 export default MetodePembayaran;

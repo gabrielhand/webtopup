@@ -15,6 +15,7 @@ import SubKategoriRoute from "./routes/SubKategoriRoute.js";
 import MethodRoute from "./routes/MethodRoute.js";
 import RatingRoute from "./routes/RatingRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
+import VoucherRoute from "./routes/VoucherRoute.js";
 import FileUpload from "express-fileupload";
 
 dotenv.config();
@@ -24,7 +25,7 @@ const app = express();
 const sessionStore = SequelizeStore(session.Store);
 
 const store = new sessionStore({
-  db: db
+  db: db,
 });
 
 app.use(
@@ -35,6 +36,8 @@ app.use(
     store: store,
     cookie: {
       secure: "auto",
+      httpOnly: true,
+      sameSite: "strict",
     },
   })
 );
@@ -46,7 +49,7 @@ app.use(
 );
 
 app.use(express.json());
-app.use(FileUpload())
+app.use(FileUpload());
 app.use(express.static("public"));
 app.use(UserRoute);
 app.use(KategoriRoute);
@@ -59,6 +62,7 @@ app.use(SubKategoriRoute);
 app.use(MethodRoute);
 app.use(RatingRoute);
 app.use(AuthRoute);
+app.use(VoucherRoute);
 
 // store.sync();
 

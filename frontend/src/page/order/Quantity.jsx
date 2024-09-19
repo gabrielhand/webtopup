@@ -1,14 +1,30 @@
-import ShoppingCartImage from "../../assets/shopping-cart.png";
 import AddToCartImage from "../../assets/add-to-cart.png";
+import PropTypes from "prop-types";
 
-const Quantity = () => {
+const Quantity = ({ quantity, setQuantity }) => {
+  const handleIncrement = () => {
+    if (quantity < 5) {
+      setQuantity(quantity + 1);
+    }
+  };
+
+  const handleDecrement = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
   return (
     <div id="Quantity-Content" className="flex flex-col gap-y-3">
       <div className="flex flex-row gap-x-2">
         <div className="flex flex-row justify-between bg-[#4169e1] rounded-xl w-full overflow-visible">
           <p className="px-5 py-3 text-white font-medium">Jumlah Pembelian</p>
           <figure className="relative">
-            <img src={AddToCartImage} alt="AddToCart-Image" className="absolute lg:right-6 right-8 -top-4 max-w-20 max-h-20" />
+            <img
+              src={AddToCartImage}
+              alt="AddToCart-Image"
+              className="absolute lg:right-6 right-8 -top-4 max-w-20 max-h-20"
+            />
           </figure>
         </div>
       </div>
@@ -22,18 +38,19 @@ const Quantity = () => {
               autoCorrect="off"
               id="quantityInput"
               autoSave="false"
-              value="1"
+              value={quantity}
               readOnly
               placeholder="Masukkan Jumlah Pembelian"
-              className="bg-slate-100 dark:bg-white dark:text-black w-full border border-[#4169e1] placeholder:font-medium font-medium focus:outline focus:outline-2 focus:outline-offset-1 focus:outline-[#4169e1] rounded-xl px-4 py-2.5"
+              className="bg-slate-100 dark:bg-white dark:text-black w-full border border-[#4169e1] placeholder:font-medium font-medium focus:outline-none pointer-events-none rounded-xl px-4 py-2.5"
             />
           </div>
           <div className="col-span-1 flex flex-row gap-x-2">
             <button
               id="btn-plus-quan"
-              className="text-white inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[#4169e1] hover:bg-[#4169e1]/80 p-2.5"
+              onClick={handleIncrement}
+              className="text-white inline-flex items-center justify-center disabled:cursor-not-allowed whitespace-nowrap rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:brightness-75 bg-[#4169e1] hover:bg-[#4169e1]/80 p-2.5"
               type="button"
-              disabled
+              disabled={quantity === 5}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -48,8 +65,10 @@ const Quantity = () => {
             </button>
             <button
               id="btn-min-quan"
-              className="text-white inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[#4169e1] hover:bg-[#4169e1]/80 p-2.5"
+              onClick={handleDecrement}
+              className="text-white inline-flex items-center justify-center disabled:cursor-not-allowed whitespace-nowrap rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:brightness-75 bg-[#4169e1] hover:bg-[#4169e1]/80 p-2.5"
               type="button"
+              disabled={quantity === 1}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -67,6 +86,11 @@ const Quantity = () => {
       </div>
     </div>
   );
+};
+
+Quantity.propTypes = {
+  quantity: PropTypes.number.isRequired,
+  setQuantity: PropTypes.func.isRequired,
 };
 
 export default Quantity;

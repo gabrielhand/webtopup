@@ -28,6 +28,10 @@ const Order = () => {
   const [isLoadingRat, setIsLoadingRat] = useState(true);
   const [selectedSubkat, setSelectedSubkat] = useState(null);
   const [activeSection, setActiveSection] = useState("detailAkun");
+  const [selectedNominal, setSelectedNominal] = useState(null);
+  const [price, setPrice] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const handleSectionChange = (section) => {
     setActiveSection(section);
@@ -73,6 +77,38 @@ const Order = () => {
     getRating();
   }, [kode]);
 
+  useEffect(() => {
+    const fetchPrice = async () => {
+      if (selectedNominal) {
+        try {
+          const formData = new FormData();
+          formData.append("nominal", selectedNominal);
+
+          const response = await axios.post(
+            `http://localhost:5000/layanan/price`,
+            formData
+          );
+
+          setPrice(response.data.harga);
+        } catch (error) {
+          console.error("Error fetching price: ", error.message);
+        }
+      }
+    };
+
+    fetchPrice();
+  }, [selectedNominal]);
+
+  useEffect(() => {
+    if (price && quantity) {
+      setTotalPrice(price * quantity);
+    }
+  }, [price, quantity]);
+
+  const handleNominalChange = (nominal) => {
+    setSelectedNominal(nominal);
+  };
+
   const ForDetailAkun = {
     kode: kategori?.data?.kode,
     placeholder_1: kategori?.data?.placeholder_1,
@@ -99,9 +135,15 @@ const Order = () => {
         <div className="grid lg:grid-cols-3 md:grid-cols-1 grid-cols-1 lg:gap-x-4 gap-y-2 lg:ps-16 lg:pl-16 lg:pe-14 lg:pr-14 md:px-10 px-2">
           <div className="col-span-2 flex flex-col gap-y-3 lg:py-4 lg:px-0 md:p-0 p-2">
             <div className="flex flex-row justify-between bg-[#4169e1] rounded-xl shadow-lg overflow-visible">
-              <div className="px-5 py-3 text-white font-medium">Pilih Nominal</div>
+              <div className="px-5 py-3 text-white font-medium">
+                Pilih Nominal
+              </div>
               <figure className="relative">
-                <img src={SaleTagImage} alt="" className="absolute lg:right-6 right-8 -top-2 max-w-16 max-h-16" />
+                <img
+                  src={SaleTagImage}
+                  alt=""
+                  className="absolute lg:right-6 right-8 -top-2 max-w-16 max-h-16"
+                />
               </figure>
             </div>
             <div className="flex flex-row flex-wrap gap-3">
@@ -151,8 +193,12 @@ const Order = () => {
                         name="nominal"
                         value={layanan.id}
                         className="hidden"
+                        onChange={() => handleNominalChange(layanan.id)}
                       />
-                      <div className="flex flex-row justify-center rounded-xl cursor-pointer w-full h-full shadow-lg bg-white dark:bg-[#404145] hover:brightness-95 dark:hover:brightness-125 px-4 py-2.5 duration-300">
+                      <label
+                        htmlFor={`nominal-${layanan.id}`}
+                        className={`flex flex-row justify-center rounded-xl cursor-pointer w-full h-full shadow-lg bg-white dark:bg-[#404145] hover:brightness-95 dark:hover:brightness-125 px-4 py-2.5 ${selectedNominal === layanan.id ? "outline outline-blue-500 duration-100" : "duration-300"}`}
+                      >
                         <div className="flex flex-col justify-center items-center text-center gap-y-2">
                           <p className="text-black dark:text-white">
                             {layanan.layanan}
@@ -165,7 +211,7 @@ const Order = () => {
                             })}
                           </p>
                         </div>
-                      </div>
+                      </label>
                     </div>
                   ))}
               </div>
@@ -225,9 +271,9 @@ const Order = () => {
                 }`}
               >
                 <DetailAkun detailAkun={ForDetailAkun} />
-                <Quantity />
+                <Quantity quantity={quantity} setQuantity={setQuantity} />
                 <KodePromo />
-                <MetodePembayaran methods={isLoadingMet ? "" : methods} />
+                <MetodePembayaran methods={isLoadingMet ? "" : methods} totalPrice={totalPrice} isDisabled={!selectedNominal} />
                 <Konfirmasi />
               </div>
               <div
