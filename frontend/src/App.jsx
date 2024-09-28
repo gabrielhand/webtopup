@@ -11,7 +11,18 @@ import axios from "axios";
 import Me from "./page/me/Me";
 import MainDashboardUser from "./page/me/MainDashboardUser";
 import RiwayatPesanan from "./page/me/RiwayatPesanan";
-import Dashboard from "./admin/page/Dashboard";
+import Dashboard from "./admin/page/dashboard/Dashboard";
+import MainDashboardAdmin from "./admin/components/main/MainDashboardAdmin";
+import SemuaPesanan from "./admin/page/pesanan/SemuaPesanan";
+import PesananJoki from "./admin/page/pesanan/PesananJoki";
+import PesananGiftSkin from "./admin/page/pesanan/PesananGiftSkin";
+import PesananVilog from "./admin/page/pesanan/PesananVilog";
+import MemberDeposit from "./admin/page/member/MemberDeposit";
+import KelolaMember from "./admin/page/member/KelolaMember";
+import Kategori from "./admin/page/produk/Kategori";
+import SubKategori from "./admin/page/produk/SubKategori";
+import Tipe from "./admin/page/produk/Tipe";
+import Layanan from "./admin/page/produk/Layanan";
 
 const router = (settingweb, isDarkMode, toggleDarkMode) =>
   createBrowserRouter([
@@ -66,10 +77,63 @@ const router = (settingweb, isDarkMode, toggleDarkMode) =>
       ),
     },
     {
-      path: "/dashboard",
       element: (
-        <Dashboard />
+        <MainDashboardAdmin
+          settingweb={settingweb}
+          isDarkMode={isDarkMode}
+          toggleDarkMode={toggleDarkMode}
+        />
       ),
+      children: [
+        {
+          path: "/dashboard",
+          element: <Dashboard />,
+        },
+        {
+          path: "/pesanan/semua",
+          element: <SemuaPesanan />,
+        },
+        {
+          path: "/pesanan/joki",
+          element: <PesananJoki />,
+        },
+        {
+          path: "/pesanan/gift-skin",
+          element: <PesananGiftSkin />,
+        },
+        {
+          path: "/pesanan/dmvilog",
+          element: <PesananVilog />,
+        },
+        {
+          path: "/member/deposit",
+          element: <MemberDeposit />,
+        },
+        {
+          path: "/member/kelola",
+          element: <KelolaMember />,
+        },
+        {
+          path: "/produk/kategori",
+          element: <Kategori />,
+        },
+        {
+          path: "/produk/subkategori",
+          element: <SubKategori />,
+        },
+        {
+          path: "/produk/tipe",
+          element: <Tipe />,
+        },
+        {
+          path: "/produk/layanan",
+          element: <Layanan />,
+        },
+        {
+          path: "/produk/voucher",
+          element: <Layanan />,
+        },
+      ],
     },
   ]);
 

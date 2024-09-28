@@ -1,7 +1,9 @@
-import { Sequelize } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import Layanan from "../models/LayananModel.js";
 import User from "../models/UserModel.js";
 import Voucher from "../models/VoucherModel.js";
+import Kategori from "../models/KategoriModel.js";
+import SubKategori from "../models/SubKategoriModel.js";
 
 export const getLayanan = async (req, res) => {
   try {
@@ -97,5 +99,63 @@ export const getPriceLayanan = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const getLayananForAdmin = async (req, res) => {
+  try {
+    const { page = 1, limit = 5, id } = req.query;
+    let whereCondition = {};
+
+    if (id) {
+      whereCondition.id = id;
+    }
+
+    const layanan = await Layanan.findAndCountAll({
+      where: whereCondition,
+      include: {
+        model: Kategori,
+        attributes: ["nama"],
+      },
+      order: [["created_at", "DESC"]],
+      limit: parseInt(limit),
+      offset: (page - 1) * limit,
+    });
+    return res.status(200).json({
+      totalPages: Math.ceil(layanan.count / limit),
+      currentPage: parseInt(page),
+      layanan: layanan.rows,
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const getKategoriForLayananAdmin = async (req, res) => {
+  try {
+    const response = await Kategori.findAll({
+      attributes: ["id", "nama"],
+    });
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const getSubKategoriForLayananAdmin = async (req, res) => {
+  try {
+    const kategoriId = req.query.kategori_id;
+
+    const subKat = await SubKategori.findAll({
+      where: {
+        category_id: kategoriId,
+      },
+    });
+
+    return res.status(200).json(subKat);
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
   }
 };

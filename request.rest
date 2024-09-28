@@ -22,6 +22,9 @@ GET http://localhost:5000/kategoribytipe
 GET http://localhost:5000/kategori/services
 
 ###
+GET http://localhost:5000/kategoriforadmin?page=1&limit=5
+
+###
 GET http://localhost:5000/layanan
 
 ###
@@ -37,6 +40,12 @@ GET http://localhost:5000/berita/swiper
 
 ###
 GET http://localhost:5000/pembelianforcektransaksi
+
+###
+GET http://localhost:5000/pembelianfordashboardadmin
+
+###
+GET http://localhost:5000/pembelianforsemuapesananadmin
 
 ###
 GET http://localhost:5000/pembelian

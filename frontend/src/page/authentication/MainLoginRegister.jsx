@@ -11,12 +11,13 @@ import { reset } from "../../features/authSlices";
 const MainLoginRegister = ({ settingweb, isDarkMode }) => {
   const [activeSection, setActiveSection] = useState("Login");
   const [isVisible, setIsVisible] = useState(false);
+  const [msg, setMsg] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, isSuccess } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (user || isSuccess) {
+    if (user || isSuccess && msg) {
       setIsVisible(true);
 
       setTimeout(() => {
@@ -45,6 +46,10 @@ const MainLoginRegister = ({ settingweb, isDarkMode }) => {
   //   }
   // }, []);
 
+  useEffect(() => {
+    console.log("Pesan saat ini:", msg);  // Memastikan msg berisi nilai yang benar
+  }, [msg]);
+
   const handleSwitchSection = () => {
     setActiveSection((prev) => (prev === "Login" ? "Register" : "Login"));
   };
@@ -69,7 +74,7 @@ const MainLoginRegister = ({ settingweb, isDarkMode }) => {
               : "translate-x-[65%] opacity-0 z-0"
           }`}
         >
-          <Login logoHeader={settingweb.og_image} />
+          <Login logoHeader={settingweb.og_image} setMsg={setMsg}/>
         </div>
         <div
           className={`absolute right-0 w-[65%] h-full transition-all duration-[300ms] hover:overflow-y-auto overflow-hidden ${
@@ -78,7 +83,11 @@ const MainLoginRegister = ({ settingweb, isDarkMode }) => {
               : "-translate-x-[65%] opacity-0 z-0"
           }`}
         >
-          <Register logoHeader={settingweb.og_image} />
+          <Register
+            logoHeader={settingweb.og_image}
+            setActiveSection={setActiveSection}
+            setMsg={setMsg}
+          />
         </div>
       </div>
       <div
@@ -206,7 +215,9 @@ const MainLoginRegister = ({ settingweb, isDarkMode }) => {
         </div>
       </div>
       <div
-        className={`absolute left-5 bottom-5 transition-all duration-300 ${
+        className={`absolute ${
+          activeSection === "Login" ? "left-5" : "right-5"
+        } bottom-5 transition-all duration-300 ${
           isVisible
             ? "translate-y-0 opacity-100 z-50"
             : "translate-y-full opacity-0 z-50"
@@ -214,7 +225,7 @@ const MainLoginRegister = ({ settingweb, isDarkMode }) => {
       >
         <Alert
           status="Sukses"
-          message="Berhasil Login!"
+          message={msg}
           bg="bg-emerald-50"
           bgIcon="bg-emerald-400"
           border="border-emerald-400"

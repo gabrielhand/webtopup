@@ -16,6 +16,8 @@ import MethodRoute from "./routes/MethodRoute.js";
 import RatingRoute from "./routes/RatingRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
 import VoucherRoute from "./routes/VoucherRoute.js";
+import DataJokiRoute from "./routes/DataJokiRoute.js";
+import DepositRoute from "./routes/DepositRoute.js";
 import FileUpload from "express-fileupload";
 
 dotenv.config();
@@ -63,6 +65,8 @@ app.use(MethodRoute);
 app.use(RatingRoute);
 app.use(AuthRoute);
 app.use(VoucherRoute);
+app.use(DataJokiRoute);
+app.use(DepositRoute);
 
 // store.sync();
 

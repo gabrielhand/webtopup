@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginUser, getMe, reset } from "../../features/authSlices";
+import PropTypes from "prop-types";
 
-const Login = ({ logoHeader }) => {
+const Login = ({ logoHeader, setMsg }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
@@ -20,14 +21,14 @@ const Login = ({ logoHeader }) => {
     if (user || isSuccess) {
       setTimeout(() => {
         navigate("/me");
+
+        setMsg("Berhasil Login");
       }, 2300);
       setTimeout(() => {
         dispatch(reset());
       }, 2000);
     }
   }, [user, isSuccess, dispatch, navigate]);
-
-
 
   const Auth = (e) => {
     e.preventDefault();
@@ -52,7 +53,10 @@ const Login = ({ logoHeader }) => {
           </div>
           <div className="flex flex-col gap-y-4 lg:w-2/3 w-full px-2">
             <div className="flex flex-col gap-y-3">
-              <label htmlFor="inputUsernameLogin" className="px-1 font-medium text-black dark:text-white">
+              <label
+                htmlFor="inputUsernameLogin"
+                className="px-1 font-medium text-black dark:text-white"
+              >
                 Username
               </label>
               <input
@@ -66,7 +70,10 @@ const Login = ({ logoHeader }) => {
               />
             </div>
             <div className="flex flex-col w-full gap-y-2">
-              <label htmlFor="inputPasswordLogin" className="px-1 font-medium text-black dark:text-white">
+              <label
+                htmlFor="inputPasswordLogin"
+                className="px-1 font-medium text-black dark:text-white"
+              >
                 Password
               </label>
               <div className="flex flex-row items-center">
@@ -106,6 +113,10 @@ const Login = ({ logoHeader }) => {
       </form>
     </div>
   );
+};
+
+Login.propTypes = {
+  logoHeader: PropTypes.string,
 };
 
 export default Login;

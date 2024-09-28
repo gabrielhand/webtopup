@@ -39,7 +39,9 @@ const CekTransaksi = () => {
             animate ? "translate-y-0" : "translate-y-full"
           }`}
         >
-          <p className="lg:text-3xl md:text-2xl text-xl font-medium">Cek Transaksi</p>
+          <p className="lg:text-3xl md:text-2xl text-xl font-medium">
+            Cek Transaksi
+          </p>
           <p className="lg:text-base md:text-sm text-xs font-light">
             Lacak pesananmu dengan mudah, cukup masukkan Nomor Invoice di bawah
             ini!
@@ -69,7 +71,7 @@ const CekTransaksi = () => {
         </div>
       </div>
       <div className="text-black dark:text-gray-300 font-medium underline lg:text-base -my-2">
-      Memperlihatkan 10 riwayat transaksi terbaru
+        Memperlihatkan 10 riwayat transaksi terbaru
       </div>
       <div className="shadow-md border border-zinc-300 dark:border-[#4169e1]/30 rounded-xl flex flex-row w-full overflow-hidden pb-2 overflow-x-auto">
         <table className="bg-transparent w-full text-start">
@@ -95,7 +97,11 @@ const CekTransaksi = () => {
                   {pembelian.layanan}
                 </td>
                 <td className="py-2 px-4 font-light text-black dark:text-white">
-                  Rp {pembelian.harga.toLocaleString("id-ID", {styles: "currency", currency: "IDR"})}
+                  Rp{" "}
+                  {pembelian.harga.toLocaleString("id-ID", {
+                    styles: "currency",
+                    currency: "IDR",
+                  })}
                 </td>
                 <td className="py-2 px-4 font-light text-black dark:text-white">
                   {pembelian.created_at}

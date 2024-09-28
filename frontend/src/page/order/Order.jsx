@@ -197,7 +197,11 @@ const Order = () => {
                       />
                       <label
                         htmlFor={`nominal-${layanan.id}`}
-                        className={`flex flex-row justify-center rounded-xl cursor-pointer w-full h-full shadow-lg bg-white dark:bg-[#404145] hover:brightness-95 dark:hover:brightness-125 px-4 py-2.5 ${selectedNominal === layanan.id ? "outline outline-blue-500 duration-100" : "duration-300"}`}
+                        className={`flex flex-row justify-center rounded-xl cursor-pointer w-full h-full shadow-lg bg-white dark:bg-[#404145] hover:brightness-95 dark:hover:brightness-125 px-4 py-2.5 ${
+                          selectedNominal === layanan.id
+                            ? "outline outline-blue-500 duration-100"
+                            : "duration-300"
+                        }`}
                       >
                         <div className="flex flex-col justify-center items-center text-center gap-y-2">
                           <p className="text-black dark:text-white">
@@ -273,7 +277,11 @@ const Order = () => {
                 <DetailAkun detailAkun={ForDetailAkun} />
                 <Quantity quantity={quantity} setQuantity={setQuantity} />
                 <KodePromo />
-                <MetodePembayaran methods={isLoadingMet ? "" : methods} totalPrice={totalPrice} isDisabled={!selectedNominal} />
+                <MetodePembayaran
+                  methods={isLoadingMet ? null : methods}
+                  totalPrice={totalPrice}
+                  isDisabled={!selectedNominal}
+                />
                 <Konfirmasi />
               </div>
               <div

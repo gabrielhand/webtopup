@@ -2,6 +2,39 @@ import { Op, Sequelize } from "sequelize";
 import db from "../config/database.js";
 import User from "../models/UserModel.js";
 import argon2 from "argon2";
+import crypto from "crypto";
+
+export const Register = async (req, res) => {
+  const { name, username, password } = req.body;
+
+  const hashPassword = await argon2.hash(password);
+
+  let no = req.body.whatsapp;
+
+  if (no.startsWith("0")) {
+    no = "62" + no.slice(1);
+  }
+
+  const generateApiKey = (length) => {
+    return crypto.randomBytes(length).toString("hex").slice(0, length);
+  };
+
+  const apiKey = generateApiKey(25);
+
+  try {
+    await User.create({
+      name: name,
+      username: username,
+      password: hashPassword,
+      whatsapp: no,
+      balance: 0,
+      api_key: apiKey,
+    });
+    res.status(201).json({ msg: "Berhasil mendaftarkan akun anda!" });
+  } catch (error) {
+    res.status(400).json({ msg: error.message });
+  }
+};
 
 export const Login = async (req, res) => {
   const user = await User.findOne({

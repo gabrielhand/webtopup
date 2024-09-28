@@ -2,6 +2,8 @@ import Layanan from "../models/LayananModel.js";
 import Kategori from "../models/KategoriModel.js";
 import Tipe from "../models/TipeModel.js";
 import Pembelian from "../models/PembelianModel.js";
+import DataJoki from "../models/DataJokiModel.js";
+import Pembayaran from "../models/PembayaranModel.js";
 import SubKategori from "../models/SubKategoriModel.js";
 
 Layanan.belongsTo(Kategori, { foreignKey: "kategori_id" });
@@ -19,4 +21,16 @@ Pembelian.belongsTo(Layanan, {
   as: "layananDetail",
   targetKey: "layanan",
 });
-export { Layanan, Kategori, Tipe, Pembelian, SubKategori };
+Pembelian.belongsTo(Pembayaran, {
+  foreignKey: "order_id",
+  targetKey: "order_id",
+});
+DataJoki.belongsTo(Pembelian, {
+  foreignKey: "order_id",
+  targetKey: "order_id",
+});
+DataJoki.belongsTo(Pembayaran, {
+  foreignKey: "order_id",
+  targetKey: "order_id",
+});
+export { Layanan, Kategori, Tipe, Pembelian, DataJoki, SubKategori };

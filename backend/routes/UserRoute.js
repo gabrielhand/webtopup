@@ -1,19 +1,27 @@
 import express from "express";
 import {
-  getUsers,
-  createUser,
+  getUsersForKelolaMember,
+  createUserForKelolaMember,
   updateUser,
   updatePasswordUser,
   getLimaPembelianByUser,
   getStatusAllPembelianByUser,
   getRiwayatPembelianByUser,
+  updateBalanceUserForKelolaMember,
+  deleteUserForKelolaMember,
+  getUsersByIdForEditKelolaMember,
+  updateUsersByUsernameForEditKelolaMember,
 } from "../controllers/UserController.js";
 import { verifyUser, verifyAdminOnly } from "../middleware/AuthMiddleware.js";
 
 const router = express.Router();
 
-router.get("/users", verifyUser, verifyAdminOnly, getUsers);
-router.post("/users", createUser);
+router.get("/users/member", verifyUser, verifyAdminOnly, getUsersForKelolaMember);
+router.post("/users/member/create", verifyUser, verifyAdminOnly, createUserForKelolaMember);
+router.patch("/users/member/balance/update", verifyUser, verifyAdminOnly, updateBalanceUserForKelolaMember);
+router.get("/users/member/get/:id", verifyUser, verifyAdminOnly, getUsersByIdForEditKelolaMember);
+router.patch("/users/member/update/:username", verifyUser, verifyAdminOnly, updateUsersByUsernameForEditKelolaMember);
+router.delete("/users/member/delete/:id", verifyUser, verifyAdminOnly, deleteUserForKelolaMember);
 router.patch("/users/edit/:id", updateUser);
 router.patch("/users/password/edit", updatePasswordUser);
 router.get("/users/pembelian/lima/:username", getLimaPembelianByUser);

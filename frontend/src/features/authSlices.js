@@ -34,7 +34,7 @@ export const getMe = createAsyncThunk("user/getMe", async (_, thunkAPI) => {
   } catch (error) {
     if (error.response) {
       const message = error.response.data.msg;
-      console.log('Error Message: ', message);
+      // console.log('Error Message: ', message);
       return thunkAPI.rejectWithValue(message);
     }
   }

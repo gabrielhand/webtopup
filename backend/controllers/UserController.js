@@ -9,28 +9,54 @@ import {
   Kategori,
   SubKategori,
 } from "../config/relations.js";
-import db from "../config/database.js";
 
-export const getUsers = async (req, res) => {
+export const getUsersForKelolaMember = async (req, res) => {
   try {
-    const response = await User.findAll({
-      attributes: ["name", "username", "whatsapp", "api_key"],
+    const { page = 1, limit = 5, username } = req.query;
+    let whereCondition = {};
+
+    if (username) {
+      whereCondition.username = username;
+    }
+
+    const memberKelola = await User.findAndCountAll({
+      where: whereCondition,
+      order: [["created_at", "DESC"]],
+      attributes: [
+        "id",
+        "name",
+        "username",
+        "role",
+        "whatsapp",
+        "balance",
+        "created_at",
+      ],
+      limit: parseInt(limit),
+      offset: (page - 1) * limit,
     });
-    res.status(200).json(response);
+    return res.status(200).json({
+      totalPages: Math.ceil(memberKelola.count / limit),
+      currentPage: parseInt(page),
+      memberKelola: memberKelola.rows,
+    });
   } catch (error) {
     console.log(error.message);
   }
 };
 
-export const createUser = async (req, res) => {
+export const createUserForKelolaMember = async (req, res) => {
   const { name, username, password } = req.body;
 
   const hashPassword = await argon2.hash(password);
 
-  let no = req.body.whatsapp;
+  let no;
 
-  if (no.startsWith("0")) {
-    no = "62" + no.slice(1);
+  if (req.body.whatsapp) {
+    no = req.body.whatsapp;
+
+    if (no.startsWith("0")) {
+      no = "62" + no.slice(1);
+    }
   }
 
   const generateApiKey = (length) => {
@@ -48,9 +74,87 @@ export const createUser = async (req, res) => {
       balance: 0,
       api_key: apiKey,
     });
-    res.status(201).json({ msg: "Berhasil mendaftarkan akun anda!" });
+    res.status(201).json({ msg: "Berhasil menambahkan user!" });
   } catch (error) {
     res.status(400).json({ msg: error.message });
+  }
+};
+
+export const getUsersByIdForEditKelolaMember = async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const user = await User.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    return res.status(200).json({
+      username: user.username,
+      balance: user.balance,
+      role: user.role,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateUsersByUsernameForEditKelolaMember = async (req, res) => {
+  const usernameParams = req.params.username;
+  const { username, balance, role } = req.body;
+
+  try {
+    await User.update(
+      {
+        username: username,
+        balance: balance,
+        role: role,
+      },
+      {
+        where: {
+          username: usernameParams,
+        },
+      }
+    );
+
+    return res.status(200).json({
+      msg: "Berhasil memperbarui data",
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateBalanceUserForKelolaMember = async (req, res) => {
+  const username = req.body.username;
+
+  try {
+    const user = await User.findOne({
+      where: {
+        username: username,
+      },
+    });
+
+    if (!user)
+      return res.status(404).json({
+        msg: "Maaf, user tidak ditemukan!",
+      });
+
+    await User.update(
+      {
+        balance: req.body.balance,
+      },
+      {
+        where: {
+          username: username,
+        },
+      }
+    );
+
+    res.status(200).json({ msg: "Berhasil menambahkan saldo!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -118,12 +222,11 @@ export const updateUser = async (req, res) => {
     );
     res.status(200).json({ msg: "Berhasil mengedit data user!" });
   } catch (error) {
-    console.log(error.message);
+    res.status(500).json({ error: error.message });
   }
 };
 
 export const updatePasswordUser = async (req, res) => {
-  console.log(req.session.userId);
   if (!req.session.userId) {
     return res.status(401).json({ msg: "Mohon login ke akun kamu!" });
   }
@@ -290,4 +393,23 @@ export const getRiwayatPembelianByUser = async (req, res) => {
   }
 };
 
-export const deleteUser = async (req, res) => {};
+export const deleteUserForKelolaMember = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const user = await User.destroy({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (user === 0) {
+      return res.status(404).json({ message: "User tidak ditemukan!" });
+    }
+
+    return res.status(200).json({
+      msg: "Berhasil menghapus member!",
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

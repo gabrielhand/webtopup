@@ -137,7 +137,7 @@ const RiwayatPesanan = () => {
             </div>
           </div>
           <div
-            onClick={() => handleFilterByStatus("Cancel")}
+            onClick={() => handleFilterByStatus("Batal")}
             className="flex flex-row items-center gap-3 bg-red-400 rounded-xl px-4 py-3 text-white font-medium cursor-pointer"
           >
             <img src={ImgError} alt="Icon-Cancel.png" className="max-w-16" />
@@ -224,7 +224,9 @@ const RiwayatPesanan = () => {
                           <td className="py-2 px-4 font-light text-black dark:text-white lg:whitespace-nowrap">
                             {pembelian.layananDetail
                               ? pembelian.layananDetail.kategori.nama
-                              : pembelian.layananSubKat.kategori.nama}
+                              : pembelian.layananSubKat
+                              ? pembelian.layananSubKat.kategori.nama
+                              : "Test Pembelian"}
                           </td>
                           <td className="py-2 px-4 font-light text-black dark:text-white lg:min-w-80">
                             {pembelian.layanan}

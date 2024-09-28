@@ -1,7 +1,56 @@
-const Register = ({ logoHeader }) => {
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { reset } from "../../features/authSlices";
+import axios from "axios";
+
+const Register = ({ logoHeader, setActiveSection, setMsg }) => {
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (user) {
+      setTimeout(() => {
+        navigate("/me");
+      }, 2300);
+      setTimeout(() => {
+        dispatch(reset());
+      }, 2000);
+    }
+  }, [user, dispatch, navigate]);
+
+  const Register = async (e) => {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("username", username);
+      formData.append("password", password);
+      formData.append("whatsapp", whatsapp);
+      const response = await axios.post(
+        "http://localhost:5000/register",
+        formData,
+        {}
+      );
+
+      setMsg(response.data);
+      setActiveSection("Login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="w-full h-full">
-      <form action="">
+      <form onSubmit={Register}>
         <div className="flex flex-col gap-y-6 h-full lg:p-10 md:p-8 p-6">
           <figure>
             <img src={logoHeader} alt="" className="max-w-32 max-h-32" />
@@ -27,11 +76,16 @@ const Register = ({ logoHeader }) => {
                 name="name"
                 id="inputNameRegister"
                 placeholder="Masukkan nama kamu..."
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="flex flex-row text-black px-4 py-2.5 rounded-xl bg-white focus:outline-none cursor-pointer"
               />
             </div>
             <div className="flex flex-col gap-y-3">
-              <label htmlFor="inputUsernameRegister" className="px-1 font-medium text-black dark:text-white">
+              <label
+                htmlFor="inputUsernameRegister"
+                className="px-1 font-medium text-black dark:text-white"
+              >
                 Username
               </label>
               <input
@@ -39,6 +93,8 @@ const Register = ({ logoHeader }) => {
                 name="username"
                 id="inputUsernameRegister"
                 placeholder="Masukkan username kamu..."
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="flex flex-row text-black px-4 py-2.5 rounded-xl bg-white focus:outline-none cursor-pointer"
               />
             </div>
@@ -55,6 +111,8 @@ const Register = ({ logoHeader }) => {
                   name="password"
                   id="inputPasswordRegister"
                   placeholder="Masukkan password kamu..."
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="flex flex-row w-full text-black px-4 py-2.5 rounded-xl bg-white focus:outline-none cursor-pointer"
                 />
                 <div className="relative">
@@ -84,17 +142,28 @@ const Register = ({ logoHeader }) => {
                 name="whatsapp"
                 id="inputNomorWa"
                 placeholder="Masukkan Nomor Whatsapp kamu..."
+                value={whatsapp}
+                onChange={(e) => setWhatsapp(e.target.value)}
                 className="flex flex-row text-black px-4 py-2.5 rounded-xl bg-white focus:outline-none cursor-pointer"
               />
             </div>
-            <div className="flex flex-row px-4 py-2.5 lg:mt-6 md:mt-6 mt-4 rounded-xl bg-[#4169e1] hover:brightness-75 hover:duration-300 font-medium items-center text-center justify-center text-white cursor-pointer">
+            <button
+              type="submit"
+              className="flex flex-row px-4 py-2.5 lg:mt-6 md:mt-6 mt-4 rounded-xl bg-[#4169e1] hover:brightness-75 hover:duration-300 font-medium items-center text-center justify-center text-white cursor-pointer"
+            >
               Daftar
-            </div>
+            </button>
           </div>
         </div>
       </form>
     </div>
   );
+};
+
+Register.propTypes = {
+  logoHeader: PropTypes.string,
+  setActiveSection: PropTypes.func,
+  setMsg: PropTypes.func,
 };
 
 export default Register;
