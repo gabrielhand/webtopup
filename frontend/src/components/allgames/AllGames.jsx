@@ -7,7 +7,7 @@ const AllGames = () => {
   const [kategoriByTipe, setKategoriByTipe] = useState([]);
   const [filteredKategori, setFilteredKategori] = useState([]);
   const [selectedTipe, setSelectedTipe] = useState("Semua");
-  const [loadedImages, setLoadedImages] = useState({}); // State untuk menyimpan status loading gambar
+  const [loadedImages, setLoadedImages] = useState({});
 
   const getTipe = async () => {
     const response = await axios.get("http://localhost:5000/tipe");

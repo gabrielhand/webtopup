@@ -13,7 +13,6 @@ const Layanan = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit] = useState(5);
   const [layanan, setLayanan] = useState("");
-  const [sublayanan, setSublayanan] = useState("");
   const [hargaMember, setHargaMember] = useState("");
   const [hargaGold, setHargaGold] = useState("");
   const [profitMember, setProfitMember] = useState("");
@@ -21,7 +20,6 @@ const Layanan = () => {
   const [profitPlatinum, setProfitPlatinum] = useState("");
   const [modalAwal, setModalAwal] = useState("");
   const [providerId, setProviderId] = useState("");
-  const [populer, setPopuler] = useState("");
   const [hargaPlatinum, setHargaPlatinum] = useState("");
   const [kategori, setKategori] = useState([]);
   const [selectedKategori, setSelectedKategori] = useState(null);
@@ -31,12 +29,13 @@ const Layanan = () => {
   const [isMenuSubKatOpen, setMenuSubKatOpen] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState("");
   const [isMenuProviderOpen, setMenuProviderOpen] = useState(false);
+  const [selectedFlashSale, setSelectedFlashSale] = useState("");
+  const [isMenuFlashSaleOpen, setMenuFlashSaleOpen] = useState(false);
   const [judulFlashSale, setJudulFlashSale] = useState("");
   const [hargaFlashSale, setHargaFlashSale] = useState("");
   const [expiredFlashSale, setExpiredFlashSale] = useState("");
   const [productLogo, setProductLogo] = useState(null);
-  const [bannerLayanan, setBannerLayanan] = useState(null);
-  const [petunjuk, setPetunjuk] = useState(null);
+  const [bannerFlashSale, setBannerFlashSale] = useState(null);
 
   const getKategori = async () => {
     const response = await axios.get(
@@ -76,26 +75,29 @@ const Layanan = () => {
 
     try {
       const formData = new FormData();
+      formData.append("kategori", selectedKategori.id);
       formData.append("layanan", layanan);
-      formData.append("hargaMember", hargaMember);
-      formData.append("hargaGold", hargaGold);
+      formData.append("harga_member", hargaMember);
+      formData.append("harga_gold", hargaGold);
+      formData.append("harga_platinum", hargaPlatinum);
       formData.append("profit_member", profitMember);
       formData.append("profit_gold", profitGold);
       formData.append("profit_platinum", profitPlatinum);
-      formData.append("modal_awal", modalAwal);
+      formData.append("modal", modalAwal);
       formData.append("provider_id", providerId);
-      formData.append("sub_idLayanan", sublayanan);
-      formData.append("tipe_id", selectedKategori.id);
-      formData.append("rate_member", judulFlashSale);
-      formData.append("rate_gold", hargaFlashSale);
-      formData.append("rate_platinum", expiredFlashSale);
-      formData.append("populer", populer);
-      formData.append("hargaPlatinum", hargaPlatinum);
-      formData.append("productLogo", productLogo);
-      formData.append("bannerlayanan", bannerLayanan);
-      formData.append("petunjuk", petunjuk);
+      formData.append("provider", selectedProvider.value);
+      formData.append("sub_kategori", selectedSubKat.id);
+      formData.append("product_logo", productLogo);
+      formData.append(
+        "flash_sale",
+        selectedFlashSale === "Yes" ? 1 : selectedFlashSale === "No" ? 0 : 0
+      );
+      formData.append("judul_flash_sale", judulFlashSale);
+      formData.append("harga_flash_sale", hargaFlashSale ? hargaFlashSale : 0);
+      formData.append("expired_flash_sale", expiredFlashSale);
+      formData.append("banner_flash_sale", bannerFlashSale);
       const response = await axios.post(
-        "http://localhost:5000/kategoriforadmin",
+        "http://localhost:5000/layananforadmin/create",
         formData,
         {
           headers: {
@@ -134,14 +136,13 @@ const Layanan = () => {
   }, [currentPage]);
 
   const productLogoRef = useRef(null);
-  const bannerLayananRef = useRef(null);
-  const petunjukRef = useRef(null);
+  const bannerFlashSaleRef = useRef(null);
 
-  const handleSearchKategori = () => {
+  const handleSearchLayanan = () => {
     getLayanan(1, idLayanan);
   };
 
-  const handlePageChangeKategori = (page) => {
+  const handlePageChangeLayanan = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
@@ -156,7 +157,7 @@ const Layanan = () => {
     setMenuKategoriOpen(!isMenuKategoriOpen);
   };
 
-  const handlesubKatselection = (selectedSubKat) => {
+  const handleSubKatSelection = (selectedSubKat) => {
     setSelectedSubKat(selectedSubKat);
     setMenuSubKatOpen(false);
   };
@@ -174,9 +175,17 @@ const Layanan = () => {
     setMenuProviderOpen(!isMenuProviderOpen);
   };
 
+  const toggleMenuFlashSale = () => {
+    setMenuFlashSaleOpen(!isMenuFlashSaleOpen);
+  };
+
+  const handleIsFlashSaleSelection = (selectedFlashSale) => {
+    setSelectedFlashSale(selectedFlashSale);
+    setMenuFlashSaleOpen(false);
+  };
+
   const handleResetaddLayanan = () => {
     setLayanan("");
-    setSublayanan("");
     setHargaMember("");
     setHargaGold("");
     setHargaPlatinum("");
@@ -188,16 +197,15 @@ const Layanan = () => {
     setHargaFlashSale("");
     setExpiredFlashSale("");
     setSelectedKategori(null);
+    setSelectedSubKat(null);
     setSelectedProvider(null);
+    setSelectedFlashSale(null);
     setProviderId("");
-    setPopuler("");
     setProductLogo(null);
-    setBannerLayanan(null);
-    setPetunjuk(null);
+    setBannerFlashSale(null);
 
     if (productLogoRef.current) productLogoRef.current.value = null;
-    if (bannerLayananRef.current) bannerLayananRef.current.value = null;
-    if (petunjukRef.current) petunjukRef.current.value = null;
+    if (bannerFlashSaleRef.current) bannerFlashSaleRef.current.value = null;
   };
 
   return (
@@ -224,7 +232,7 @@ const Layanan = () => {
               className="col-span-4 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
             />
             <label
-              htmlFor="tipe"
+              htmlFor="kategori"
               className="col-span-1 flex flex-row items-center text-black dark:text-white"
             >
               Kategori
@@ -293,7 +301,7 @@ const Layanan = () => {
                     subKats.map((subKatOption) => (
                       <div
                         key={subKatOption.id}
-                        onClick={() => handlesubKatselection(subKatOption)}
+                        onClick={() => handleSubKatSelection(subKatOption)}
                         className="flex flex-row px-4 py-2 text-black dark:text-white cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:duration-300 rounded-lg z-50"
                       >
                         {subKatOption.name}
@@ -318,7 +326,7 @@ const Layanan = () => {
                 onClick={toggleMenuProvider}
                 className="flex flex-row items-center justify-between gap-3 text-black dark:text-white bg-white dark:bg-[#16171a] p-2.5 rounded-lg focus:outline focus:outline-offset-1 focus:outline-zinc-600 ring-1 ring-zinc-200 dark:ring-zinc-600 cursor-pointer"
               >
-                {selectedProvider ? selectedProvider : "Pilih Provider"}
+                {selectedProvider ? selectedProvider.nama : "Pilih Provider"}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="14"
@@ -335,27 +343,69 @@ const Layanan = () => {
               {isMenuProviderOpen && (
                 <div className="absolute z-10 top-12 flex flex-col gap-y-2 bg-white dark:bg-[#16171a] p-2 rounded-lg w-full ring-1 ring-zinc-200 dark:ring-zinc-600">
                   {[
-                    "Digiflazz",
-                    "Vip Reseller",
-                    "API Games",
-                    "MooGold",
-                    "Mobapay",
-                    "Gamepointclub",
-                    "Bxystore",
-                    "EvilBee",
-                    "Mengtopup",
-                    "Alpharamz",
-                    "Joki",
-                    "Gift Skin",
-                    "DM_Vilog",
-                    "Manual",
+                    {
+                      nama: "Digiflazz",
+                      value: "digiflazz",
+                    },
+                    {
+                      nama: "Vip Reseller",
+                      value: "vip",
+                    },
+                    {
+                      nama: "API Games",
+                      value: "apigames",
+                    },
+                    {
+                      nama: "MooGold",
+                      value: "moogold",
+                    },
+                    {
+                      nama: "Mobapay",
+                      value: "mobapay",
+                    },
+                    {
+                      nama: "Gamepointclub",
+                      value: "gamepoint",
+                    },
+                    {
+                      nama: "Bxystore",
+                      value: "bxystore",
+                    },
+                    {
+                      nama: "EvilBee",
+                      value: "evilbee",
+                    },
+                    {
+                      nama: "Mengtopup",
+                      value: "meng",
+                    },
+                    {
+                      nama: "Alpharamz",
+                      value: "alpha",
+                    },
+                    {
+                      nama: "Joki",
+                      value: "joki",
+                    },
+                    {
+                      nama: "Gift Skin",
+                      value: "gift_skin",
+                    },
+                    {
+                      nama: "DM Vilog",
+                      value: "dm_vilog",
+                    },
+                    {
+                      nama: "Manual",
+                      value: "manual",
+                    },
                   ].map((providerOption) => (
                     <div
-                      key={providerOption}
+                      key={providerOption.nama}
                       onClick={() => handleProviderSelection(providerOption)}
                       className="flex flex-row px-4 py-2 text-black dark:text-white cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:duration-300 rounded-lg z-50"
                     >
-                      {providerOption}
+                      {providerOption.nama}
                     </div>
                   ))}
                 </div>
@@ -369,7 +419,7 @@ const Layanan = () => {
             </label>
             <input
               id="hargaMember"
-              type="text"
+              type="number"
               placeholder="Harga Member"
               value={hargaMember}
               onChange={(e) => setHargaMember(e.target.value)}
@@ -383,7 +433,7 @@ const Layanan = () => {
             </label>
             <input
               id="hargaGold"
-              type="text"
+              type="number"
               placeholder="Harga Gold"
               value={hargaGold}
               onChange={(e) => setHargaGold(e.target.value)}
@@ -397,7 +447,7 @@ const Layanan = () => {
             </label>
             <input
               id="hargaPlatinum"
-              type="text"
+              type="number"
               placeholder="Harga Platinum"
               value={hargaPlatinum}
               onChange={(e) => setHargaPlatinum(e.target.value)}
@@ -411,7 +461,7 @@ const Layanan = () => {
             </label>
             <input
               id="profitMember"
-              type="text"
+              type="number"
               placeholder="Profit Member"
               value={profitMember}
               onChange={(e) => setProfitMember(e.target.value)}
@@ -425,7 +475,7 @@ const Layanan = () => {
             </label>
             <input
               id="profitGold"
-              type="text"
+              type="number"
               placeholder="Profit Gold"
               value={profitGold}
               onChange={(e) => setProfitGold(e.target.value)}
@@ -439,7 +489,7 @@ const Layanan = () => {
             </label>
             <input
               id="profitPlatinum"
-              type="text"
+              type="number"
               placeholder="Profit Platinum"
               value={profitPlatinum}
               onChange={(e) => setProfitPlatinum(e.target.value)}
@@ -453,7 +503,7 @@ const Layanan = () => {
             </label>
             <input
               id="modalAwal"
-              type="text"
+              type="number"
               placeholder="Modal Awal"
               value={modalAwal}
               onChange={(e) => setModalAwal(e.target.value)}
@@ -468,11 +518,71 @@ const Layanan = () => {
             <input
               id="providerId"
               type="text"
-              placeholder="Modal Awal"
+              placeholder="Provider ID"
               value={providerId}
               onChange={(e) => setProviderId(e.target.value)}
               className="col-span-4 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
             />
+            <label
+              htmlFor="productLogo"
+              className="col-span-1 flex flex-row text-black dark:text-white pt-2"
+            >
+              Product Logo
+            </label>
+            <div className="col-span-4">
+              <input
+                id="productLogo"
+                ref={productLogoRef}
+                type="file"
+                accept="image/*"
+                onChange={(e) => setProductLogo(e.target.files[0])}
+                className="bg-white dark:bg-[#16171a] w-full p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+              />
+              <p className="text-error lg:text-base md:text-sm mt-2">
+                *AKTIFKAN JIKA KAMU SEDANG MENGADAKAN FLASHSALE
+              </p>
+            </div>
+            <label
+              htmlFor="subKategori"
+              className="col-span-1 flex flex-row items-center text-black dark:text-white"
+            >
+              Flash Sale?
+            </label>
+            <div className="relative col-span-4 flex flex-col">
+              <div
+                onClick={toggleMenuFlashSale}
+                className="flex flex-row items-center justify-between gap-3 text-black dark:text-white bg-white dark:bg-[#16171a] p-2.5 rounded-lg focus:outline focus:outline-offset-1 focus:outline-zinc-600 ring-1 ring-zinc-200 dark:ring-zinc-600 cursor-pointer"
+              >
+                {selectedFlashSale ? selectedFlashSale : "No"}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  fill="currentColor"
+                  className={`bi bi-caret-down-fill transform transition-transform duration-100 ${
+                    isMenuFlashSaleOpen ? "rotate-180" : "rotate-0"
+                  }`}
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                </svg>
+              </div>
+              {isMenuFlashSaleOpen && (
+                <div className="absolute z-10 top-12 flex flex-col gap-y-2 bg-white dark:bg-[#16171a] p-2 rounded-lg w-full ring-1 ring-zinc-200 dark:ring-zinc-600">
+                  {["No", "Yes"].map((isFlashSaleOption) => (
+                    <div
+                      key={isFlashSaleOption}
+                      onClick={() =>
+                        handleIsFlashSaleSelection(isFlashSaleOption)
+                      }
+                      className="flex flex-row px-4 py-2 text-black dark:text-white cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:duration-300 rounded-lg z-50"
+                    >
+                      {isFlashSaleOption}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
             <label
               htmlFor="judulFlashSale"
               className="col-span-1 flex flex-row items-center text-black dark:text-white"
@@ -495,7 +605,7 @@ const Layanan = () => {
             </label>
             <input
               id="hargaFlashSale"
-              type="text"
+              type="number"
               placeholder="Harga Flash Sale"
               value={hargaFlashSale}
               onChange={(e) => setHargaFlashSale(e.target.value)}
@@ -516,54 +626,18 @@ const Layanan = () => {
               className="col-span-4 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
             />
             <label
-              htmlFor="productLogo"
+              htmlFor="bannerFlashSale"
               className="col-span-1 flex flex-row text-black dark:text-white pt-2"
             >
-              Product Logo
-            </label>
-            <div className="col-span-4">
-              <input
-                id="productLogo"
-                ref={productLogoRef}
-                type="file"
-                onChange={(e) => setProductLogo(e.target.files[0])}
-                className="bg-white dark:bg-[#16171a] w-full p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
-              />
-              <p className="text-error lg:text-base md:text-sm mt-2">
-                *AKTIFKAN JIKA KAMU SEDANG MENGADAKAN FLASHSALE
-              </p>
-            </div>
-            <label
-              htmlFor="bannerLayanan"
-              className="col-span-1 flex flex-row text-black dark:text-white pt-2"
-            >
-              Banner Layanan
-            </label>
-            <div className="col-span-4">
-              <input
-                id="bannerLayanan"
-                ref={bannerLayananRef}
-                type="file"
-                onChange={(e) => setBannerLayanan(e.target.files[0])}
-                className="bg-white dark:bg-[#16171a] w-full p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
-              />
-              <p className="text-error mt-2">
-                Disarankan Banner Layanan menggunakan ukuran 1180 x 275 pixel
-                (Lebar x Tinggi)
-              </p>
-            </div>
-            <label
-              htmlFor="petunjuk"
-              className="col-span-1 flex flex-row items-center text-black dark:text-white"
-            >
-              Petunjuk
+              Banner FlashSale
             </label>
             <input
-              id="petunjuk"
-              ref={petunjukRef}
+              id="bannerFlashSale"
+              ref={bannerFlashSaleRef}
               type="file"
-              onChange={(e) => setPetunjuk(e.target.files[0])}
-              className="col-span-4 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+              accept="image/*"
+              onChange={(e) => setBannerFlashSale(e.target.files[0])}
+              className="col-span-4 bg-white dark:bg-[#16171a] w-full p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
             />
           </div>
           <div className="flex flex-row gap-3 justify-end mt-2">
@@ -598,7 +672,7 @@ const Layanan = () => {
             className="text-black dark:text-white font-medium cursor-pointer bg-white dark:bg-[#2d2d2e] rounded-lg px-4 py-2 focus:outline-none border border-zinc-300 dark:border-zinc-600 shadow-md"
           />
           <button
-            onClick={handleSearchKategori}
+            onClick={handleSearchLayanan}
             className="flex flex-row items-center gap-x-2 px-4 py-2 bg-purple-500 hover:brightness-90 hover:dur rounded-lg text-white cursor-pointer shadow-md"
           >
             Cari
@@ -747,7 +821,7 @@ const Layanan = () => {
                             )}
                           </td>
                           <td className="py-2 px-4 font-light text-black dark:text-white">
-                            {layanan.kategori.nama}
+                            {layanan.kategori ? layanan.kategori.nama : "-"}
                           </td>
                           <td className="py-2 px-4 font-light text-black dark:text-white">
                             {layanan.layanan}
@@ -861,7 +935,7 @@ const Layanan = () => {
       </div>
       <div className="flex flex-row flex-wrap gap-2 justify-center mt-4">
         <button
-          onClick={() => handlePageChangeKategori(currentPage - 1)}
+          onClick={() => handlePageChangeLayanan(currentPage - 1)}
           disabled={currentPage === 1}
           className="px-4 py-2 mx-1 bg-gray-300 text-black rounded disabled:brightness-75 disabled:cursor-not-allowed"
         >
@@ -870,7 +944,7 @@ const Layanan = () => {
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index}
-            onClick={() => handlePageChangeKategori(index + 1)}
+            onClick={() => handlePageChangeLayanan(index + 1)}
             className={`px-4 py-2 mx-1 rounded ${
               currentPage === index + 1
                 ? "bg-purple-500 text-white"
@@ -881,7 +955,7 @@ const Layanan = () => {
           </button>
         ))}
         <button
-          onClick={() => handlePageChangeKategori(currentPage + 1)}
+          onClick={() => handlePageChangeLayanan(currentPage + 1)}
           disabled={currentPage === totalPages}
           className="px-4 py-2 mx-1 bg-purple-500 text-white rounded disabled:brightness-75 disabled:cursor-not-allowed"
         >

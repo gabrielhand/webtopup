@@ -6,6 +6,7 @@ const SidebarAdmin = ({ logoHeader, isDarkMode, toggleDarkMode }) => {
   const location = useLocation();
   const [isPesananOpen, setPesananOpen] = useState(false);
   const [isMemberOpen, setMemberOpen] = useState(false);
+  const [isKonfigurasiOpen, setKonfigurasiOpen] = useState(false);
   const [isProdukOpen, setProdukOpen] = useState(false);
 
   const togglePesanan = () => {
@@ -14,6 +15,10 @@ const SidebarAdmin = ({ logoHeader, isDarkMode, toggleDarkMode }) => {
 
   const toggleMember = () => {
     setMemberOpen(!isMemberOpen);
+  };
+
+  const toggleKonfigurasi = () => {
+    setKonfigurasiOpen(!isKonfigurasiOpen);
   };
 
   const toggleProduk = () => {
@@ -258,6 +263,94 @@ const SidebarAdmin = ({ logoHeader, isDarkMode, toggleDarkMode }) => {
         </div>
       </div>
       <div className="flex flex-row my-2 text-black dark:text-zinc-300 mt-12 text-sm">
+        Settings
+      </div>
+      <div className="flex flex-col gap-y-3">
+        <div className="flex flex-col">
+          <div
+            onClick={toggleKonfigurasi}
+            className={`flex flex-row items-center gap-3 px-4 py-2.5 rounded-lg ${
+              location.pathname === "/settings/slider" ||
+              location.pathname === "/settings/payment" ||
+              location.pathname === "/settings/website"
+                ? "bg-purple-500 text-white"
+                : "text-black dark:text-white border border-purple-500"
+            } cursor-pointer`}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="bi bi-pen-fill"
+              stroke="currentColor"
+              strokeWidth={0.5}
+              viewBox="0 0 16 16"
+            >
+              <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001" />
+            </svg>
+            Konfigurasi
+            <div className="flex flex-row grow justify-end">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className={`bi bi-chevron-down transition-all duration-700 ${
+                  isKonfigurasiOpen ? "rotate-180" : "rotate-0"
+                }`}
+                stroke="currentColor"
+                strokeWidth={1}
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            className={`flex flex-col gap-y-3 ml-10 ms-10 overflow-hidden transition-all duration-700 ${
+              isKonfigurasiOpen
+                ? "max-h-48 opacity-100 py-6"
+                : "max-h-0 opacity-0 py-0"
+            }`}
+          >
+            <Link
+              to="/settings/slider"
+              className={`flex flex-row text-sm ${
+                location.pathname === "/settings/slider"
+                  ? "text-purple-500"
+                  : "text-black hover:text-purple-500 dark:text-white dark:hover:text-purple-500"
+              } duration-500 hover:translate-x-3`}
+            >
+              Slider
+            </Link>
+            <Link
+              to="/settings/payment"
+              className={`flex flex-row text-sm ${
+                location.pathname === "/settings/payment"
+                  ? "text-purple-500"
+                  : "text-black hover:text-purple-500 dark:text-white dark:hover:text-purple-500"
+              } duration-500 hover:translate-x-3`}
+            >
+              Payment
+            </Link>
+            <Link
+              to="/settings/website"
+              className={`flex flex-row text-sm ${
+                location.pathname === "/settings/website"
+                  ? "text-purple-500"
+                  : "text-black hover:text-purple-500 dark:text-white dark:hover:text-purple-500"
+              } duration-500 hover:translate-x-3`}
+            >
+              Website
+            </Link>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-row my-2 text-black dark:text-zinc-300 mt-12 text-sm">
         Product
       </div>
       <div className="flex flex-col gap-y-3">
@@ -266,7 +359,10 @@ const SidebarAdmin = ({ logoHeader, isDarkMode, toggleDarkMode }) => {
             onClick={toggleProduk}
             className={`flex flex-row items-center gap-3 px-4 py-2.5 rounded-lg ${
               location.pathname === "/produk/kategori" ||
-              location.pathname === "/produk/subkategori" || location.pathname === "/produk/tipe" || location.pathname === "/produk/layanan" || location.pathname === "/produk/voucher"
+              location.pathname === "/produk/subkategori" ||
+              location.pathname === "/produk/tipe" ||
+              location.pathname === "/produk/layanan" ||
+              location.pathname === "/produk/voucher"
                 ? "bg-purple-500 text-white"
                 : "text-black dark:text-white border border-purple-500"
             } cursor-pointer`}

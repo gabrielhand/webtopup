@@ -8,6 +8,9 @@ const Method = db.define('methods', {
     images: {
       type: Sequelize.STRING,
     },
+    images_filename: {
+      type: Sequelize.STRING,
+    },
     code: {
       type: Sequelize.STRING,
     },

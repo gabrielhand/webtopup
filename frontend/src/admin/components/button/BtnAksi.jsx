@@ -41,11 +41,54 @@ const BtnAksi = ({ id, getData, dataTipe }) => {
   const [namaTipe, setNamaTipe] = useState("");
   const [namaTipeEdit, setNamaTipeEdit] = useState("");
 
+  const [layananEdit, setLayananEdit] = useState("");
+  const [hargaMemberEdit, setHargaMemberEdit] = useState("");
+  const [hargaGoldEdit, setHargaGoldEdit] = useState("");
+  const [hargaPlatinumEdit, setHargaPlatinumEdit] = useState("");
+  const [profitMemberEdit, setProfitMemberEdit] = useState("");
+  const [profitGoldEdit, setProfitGoldEdit] = useState("");
+  const [profitPlatinumEdit, setProfitPlatinumEdit] = useState("");
+  const [modalAwalEdit, setModalAwalEdit] = useState("");
+  const [providerIdEdit, setProviderIdEdit] = useState("");
+  const [selectedProviderEdit, setSelectedProviderEdit] = useState("");
+  const [isMenuProviderOpenEdit, setMenuProviderOpenEdit] = useState(false);
+  const [selectedFlashSaleEdit, setSelectedFlashSaleEdit] = useState("");
+  const [isMenuFlashSaleOpenEdit, setMenuFlashSaleOpenEdit] = useState(false);
+  const [judulFlashSaleEdit, setJudulFlashSaleEdit] = useState("");
+  const [hargaFlashSaleEdit, setHargaFlashSaleEdit] = useState("");
+  const [expiredFlashSaleEdit, setExpiredFlashSaleEdit] = useState("");
+  const [productLogoEdit, setProductLogoEdit] = useState(null);
+  const [bannerFlashSaleEdit, setBannerFlashSaleEdit] = useState(null);
+
+  const [kodeVoucherEdit, setKodeVoucherEdit] = useState("");
+  const [persenanPromoEdit, setPersenanPromoEdit] = useState("");
+  const [stockEdit, setStockEdit] = useState("");
+  const [maxPotonganEdit, setMaxPotonganEdit] = useState("");
+
+  const [namaPaymentEdit, setNamaPaymentEdit] = useState("");
+  const [kodePaymentEdit, setKodePaymentEdit] = useState("");
+  const [keteranganPaymentEdit, setKeteranganPaymentEdit] = useState("");
+  const [tipePaymentEdit] = useState([
+    { nama: "E-Wallet", value: "e-wallet" },
+    { nama: "Transfer Bank", value: "virtual-account" },
+    { nama: "Convenience Store", value: "convenience-store" },
+  ]);
+
+  const [selectedTipePaymentEdit, setSelectedTipePaymentEdit] = useState(null);
+  const [isMenuTipePaymentEditOpen, setMenuTipePaymentEditOpen] =
+    useState(false);
+  const [gambarPaymentEdit, setGambarPaymentEdit] = useState(null);
+
   const modalRef = useRef(null);
 
   const thumbnailRefEdit = useRef(null);
   const bannerLayananRefEdit = useRef(null);
   const petunjukRefEdit = useRef(null);
+
+  const productLogoEditRef = useRef(null);
+  const bannerFlashSaleEditRef = useRef(null);
+
+  const gambarEditRef = useRef(null);
 
   const hapusDataJoki = async () => {
     const response = await axios.delete(
@@ -283,7 +326,9 @@ const BtnAksi = ({ id, getData, dataTipe }) => {
     e.preventDefault();
 
     try {
-      const response = await axios.get(`http://localhost:5000/tipe/get/${id}`);
+      const response = await axios.get(
+        `http://localhost:5000/tipeforadmin/get/${id}`
+      );
 
       setNamaTipe(response.data.name);
       setNamaTipeEdit(response.data.name);
@@ -299,7 +344,7 @@ const BtnAksi = ({ id, getData, dataTipe }) => {
 
     try {
       const response = await axios.patch(
-        `http://localhost:5000/tipe/update/${id}`,
+        `http://localhost:5000/tipeforadmin/update/${id}`,
         {
           name: namaTipeEdit,
         }
@@ -315,7 +360,263 @@ const BtnAksi = ({ id, getData, dataTipe }) => {
 
   const hapusTipe = async () => {
     const response = await axios.delete(
-      `http://localhost:5000/tipe/delete/${id}`
+      `http://localhost:5000/tipeforadmin/delete/${id}`
+    );
+    getData();
+    console.log(response.data.msg);
+  };
+
+  const getLayananById = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/layananforadmin/get/${id}`
+      );
+
+      const savedProviderValue = response.data.provider;
+
+      const providerList = [
+        { nama: "Digiflazz", value: "digiflazz" },
+        { nama: "Vip Reseller", value: "vip" },
+        { nama: "API Games", value: "apigames" },
+        { nama: "MooGold", value: "moogold" },
+        { nama: "Mobapay", value: "mobapay" },
+        { nama: "Gamepointclub", value: "gamepoint" },
+        { nama: "Bxystore", value: "bxystore" },
+        { nama: "EvilBee", value: "evilbee" },
+        { nama: "Mengtopup", value: "meng" },
+        { nama: "Alpharamz", value: "alpha" },
+        { nama: "Joki", value: "joki" },
+        { nama: "Gift Skin", value: "gift_skin" },
+        { nama: "DM Vilog", value: "dm_vilog" },
+        { nama: "Manual", value: "manual" },
+      ];
+
+      const matchedProvider = providerList.find(
+        (provider) => provider.value === savedProviderValue
+      );
+
+      setLayananEdit(response.data.layanan);
+      setSelectedProviderEdit(matchedProvider);
+      setHargaMemberEdit(response.data.harga_member);
+      setHargaGoldEdit(response.data.harga_gold);
+      setHargaPlatinumEdit(response.data.harga_platinum);
+      setProfitMemberEdit(response.data.profit_member);
+      setProfitGoldEdit(response.data.profit_gold);
+      setProfitPlatinumEdit(response.data.profit_platinum);
+      setModalAwalEdit(response.data.modal);
+      setProviderIdEdit(response.data.provider_id);
+
+      const isFlashSale = response.data.is_flash_sale;
+      setSelectedFlashSaleEdit(
+        isFlashSale === 1 ? "Yes" : isFlashSale === 0 ? "No" : ""
+      );
+
+      const judulFlashSale = response.data.judul_flash_sale;
+      setJudulFlashSaleEdit(judulFlashSale === null ? "" : judulFlashSale);
+
+      setHargaFlashSaleEdit(response.data.harga_flash_sale);
+
+      const expFlashSale = response.data.expired_flash_sale;
+      setExpiredFlashSaleEdit(expFlashSale === null ? "" : expFlashSale);
+      modalRef.current.showModal();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const handleProviderSelection = (selectedProviderEdit) => {
+    setSelectedProviderEdit(selectedProviderEdit);
+    setMenuProviderOpenEdit(false);
+  };
+
+  const handleIsFlashSaleSelection = (selectedFlashSaleEdit) => {
+    setSelectedFlashSaleEdit(selectedFlashSaleEdit);
+    setMenuFlashSaleOpenEdit(false);
+  };
+
+  const updateLayanan = async (e) => {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData();
+      formData.append("layanan", layananEdit);
+      formData.append("harga_member", hargaMemberEdit);
+      formData.append("harga_gold", hargaGoldEdit);
+      formData.append("harga_platinum", hargaPlatinumEdit);
+      formData.append("profit_member", profitMemberEdit);
+      formData.append("profit_gold", profitGoldEdit);
+      formData.append("profit_platinum", profitPlatinumEdit);
+      formData.append("modal", modalAwalEdit);
+      formData.append("provider_id", providerIdEdit);
+      formData.append("provider", selectedProviderEdit.value);
+      formData.append("product_logo", productLogoEdit);
+      formData.append(
+        "flash_sale",
+        selectedFlashSaleEdit === "Yes"
+          ? 1
+          : selectedFlashSaleEdit === "No"
+          ? 0
+          : 0
+      );
+      formData.append("judul_flash_sale", judulFlashSaleEdit);
+      formData.append(
+        "harga_flash_sale",
+        hargaFlashSaleEdit ? hargaFlashSaleEdit : 0
+      );
+      formData.append("expired_flash_sale", expiredFlashSaleEdit);
+      formData.append("banner_flash_sale", bannerFlashSaleEdit);
+      const response = await axios.patch(
+        `http://localhost:5000/layananforadmin/update/${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      getData();
+      console.log(response.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const hapusLayanan = async () => {
+    const response = await axios.delete(
+      `http://localhost:5000/layananforadmin/delete/${id}`
+    );
+    getData();
+    console.log(response.data.msg);
+  };
+
+  const getVoucherById = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/voucherforadmin/get/${id}`
+      );
+
+      setKodeVoucherEdit(response.data.kode);
+      setPersenanPromoEdit(response.data.promo);
+      setStockEdit(response.data.stock);
+      setMaxPotonganEdit(response.data.max_potongan);
+
+      modalRef.current.showModal();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const updateVoucher = async (e) => {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData();
+      formData.append("kode", kodeVoucherEdit);
+      formData.append("promo", persenanPromoEdit);
+      formData.append("stock", stockEdit);
+      formData.append("max_potongan", maxPotonganEdit);
+      const response = await axios.patch(
+        `http://localhost:5000/voucherforadmin/update/${id}`,
+        formData
+      );
+
+      console.log(response.data);
+      modalRef.current.close();
+      getData();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const hapusVoucher = async () => {
+    const response = await axios.delete(
+      `http://localhost:5000/voucherforadmin/delete/${id}`
+    );
+    getData();
+    console.log(response.data.msg);
+  };
+
+  const hapusBerita = async () => {
+    const response = await axios.delete(
+      `http://localhost:5000/beritaforadmin/delete/${id}`
+    );
+    getData();
+    console.log(response.data.msg);
+  };
+
+  const getMethodById = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/methodforadmin/get/${id}`
+      );
+
+      setNamaPaymentEdit(response.data.name);
+      setKodePaymentEdit(response.data.code);
+      setKeteranganPaymentEdit(response.data.keterangan);
+
+      const savedTipeValue = response.data.tipe;
+
+      const tipeList = [
+        { nama: "E-Wallet", value: "e-wallet" },
+        { nama: "Transfer Bank", value: "virtual-account" },
+        { nama: "Convenience Store", value: "convenience-store" },
+      ];
+
+      const matchedTipe = tipeList.find(
+        (tipe) => tipe.value === savedTipeValue
+      );
+
+      setSelectedTipePaymentEdit(matchedTipe);
+
+      modalRef.current.showModal();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const handleTipePaymentEditSelection = (selectedTipe) => {
+    setSelectedTipePaymentEdit(selectedTipe);
+    setMenuTipePaymentEditOpen(false);
+  };
+
+  const updateMethod = async (e) => {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData();
+      formData.append("name", namaPaymentEdit);
+      formData.append("code", kodePaymentEdit);
+      formData.append("keterangan", keteranganPaymentEdit);
+      formData.append("tipe", selectedTipePaymentEdit.value);
+      formData.append("gambar", gambarPaymentEdit);
+      const response = await axios.patch(
+        `http://localhost:5000/methodforadmin/update/${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log(response.data);
+      modalRef.current.close();
+      getData();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const hapusPayment = async () => {
+    const response = await axios.delete(
+      `http://localhost:5000/methodforadmin/delete/${id}`
     );
     getData();
     console.log(response.data.msg);
@@ -330,6 +631,9 @@ const BtnAksi = ({ id, getData, dataTipe }) => {
   const isProdukTipe = location.pathname === "/produk/tipe";
   const isProdukLayanan = location.pathname === "/produk/layanan";
   const isProdukVoucher = location.pathname === "/produk/voucher";
+  const isKonfigurasiSlider = location.pathname === "/settings/slider";
+  const isKonfigurasiPayment = location.pathname === "/settings/payment";
+  const isKonfigurasiWebsite = location.pathname === "/settings/website";
 
   const toggleMenuRoleEdit = () => {
     setMenuRoleOpenEdit(!isMenuRoleOpenEdit);
@@ -347,12 +651,24 @@ const BtnAksi = ({ id, getData, dataTipe }) => {
     setMenuServerEditOpen(!isMenuServerOpenEdit);
   };
 
+  const toggleMenuProvider = () => {
+    setMenuProviderOpenEdit(!isMenuProviderOpenEdit);
+  };
+
+  const toggleMenuFlashSale = () => {
+    setMenuFlashSaleOpenEdit(!isMenuFlashSaleOpenEdit);
+  };
+  const toggleMenuTipePayment = () => {
+    setMenuTipePaymentEditOpen(!isMenuTipePaymentEditOpen);
+  };
+
   return (
     <div className="flex flex-row items-center gap-3">
       {isPesananJoki ||
       isPesananGiftSkin ||
       isPesananDmVilog ||
-      isProdukSubKategori ? (
+      isProdukSubKategori ||
+      isKonfigurasiSlider ? (
         <div
           onClick={
             isPesananJoki
@@ -363,6 +679,8 @@ const BtnAksi = ({ id, getData, dataTipe }) => {
               ? hapusPembelianDmVilog
               : isProdukSubKategori
               ? hapusSubKategori
+              : isKonfigurasiSlider
+              ? hapusBerita
               : undefined
           }
           className="flex flex-row px-3 py-1.5 bg-red-500 hover:brightness-75 hover:duration-300 rounded-lg text-white cursor-pointer"
@@ -379,6 +697,12 @@ const BtnAksi = ({ id, getData, dataTipe }) => {
                 ? getKategoriByIdForEdit
                 : isProdukTipe
                 ? getTipeById
+                : isProdukLayanan
+                ? getLayananById
+                : isProdukVoucher
+                ? getVoucherById
+                : isKonfigurasiPayment
+                ? getMethodById
                 : undefined
             }
             className="flex flex-row px-3 py-1.5 bg-yellow-500 hover:brightness-75 hover:duration-300 rounded-lg text-white cursor-pointer"
@@ -394,6 +718,12 @@ const BtnAksi = ({ id, getData, dataTipe }) => {
                 ? hapusKategori
                 : isProdukTipe
                 ? hapusTipe
+                : isProdukLayanan
+                ? hapusLayanan
+                : isProdukVoucher
+                ? hapusVoucher
+                : isKonfigurasiPayment
+                ? hapusPayment
                 : undefined
             }
             className="flex flex-row px-3 py-1.5 bg-red-500 hover:brightness-75 hover:duration-300 rounded-lg text-white cursor-pointer"
@@ -406,7 +736,9 @@ const BtnAksi = ({ id, getData, dataTipe }) => {
       <dialog ref={modalRef} className="modal p-5 lg:p-0 md:p-2">
         <div
           className={`relative rounded-box w-full ${
-            isProdukKategori ? "max-w-3xl" : "max-w-lg"
+            isProdukKategori || isProdukLayanan || isKonfigurasiPayment
+              ? "max-w-3xl"
+              : "max-w-lg"
           } bg-white dark:bg-[#18181a]`}
         >
           <form
@@ -417,6 +749,12 @@ const BtnAksi = ({ id, getData, dataTipe }) => {
                 ? updateKategoriByIdForEdit
                 : isProdukTipe
                 ? updateTipe
+                : isProdukLayanan
+                ? updateLayanan
+                : isProdukVoucher
+                ? updateVoucher
+                : isKonfigurasiPayment
+                ? updateMethod
                 : undefined
             }
             className="flex flex-col gap-y-5"
@@ -429,6 +767,10 @@ const BtnAksi = ({ id, getData, dataTipe }) => {
                   ? "Edit Kategori"
                   : isProdukTipe
                   ? "Edit Tipe"
+                  : isProdukLayanan
+                  ? "Edit Layanan"
+                  : isProdukVoucher
+                  ? "Edit Voucher"
                   : ""}
               </p>
               <p className="text-zinc-400 dark:text-zinc-500 font-medium italic">
@@ -446,7 +788,7 @@ const BtnAksi = ({ id, getData, dataTipe }) => {
                 <div className="grid grid-cols-3 gap-y-4 gap-x-2">
                   <label
                     htmlFor="usernameMemberEdit"
-                    className="col-span-1 flex flex-row items-center text-black dark:text-white"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
                   >
                     Username
                   </label>
@@ -908,6 +1250,515 @@ const BtnAksi = ({ id, getData, dataTipe }) => {
                     autoCorrect="off"
                     onChange={(e) => setNamaTipeEdit(e.target.value)}
                     className="col-span-2 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                </div>
+              )}
+              {isProdukLayanan && (
+                <div className="grid grid-cols-8 gap-y-4 gap-x-2">
+                  <label
+                    htmlFor="layanan"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Layanan
+                  </label>
+                  <input
+                    id="layanan"
+                    type="text"
+                    placeholder="Layanan"
+                    value={layananEdit}
+                    onChange={(e) => setLayananEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="provider"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Provider
+                  </label>
+                  <div className="relative col-span-6 flex flex-col">
+                    <div
+                      onClick={toggleMenuProvider}
+                      className="flex flex-row items-center justify-between gap-3 text-black dark:text-white bg-white dark:bg-[#16171a] p-2.5 rounded-lg focus:outline focus:outline-offset-1 focus:outline-zinc-600 ring-1 ring-zinc-200 dark:ring-zinc-600 cursor-pointer"
+                    >
+                      {selectedProviderEdit
+                        ? selectedProviderEdit.nama
+                        : "Pilih Provider"}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        fill="currentColor"
+                        className={`bi bi-caret-down-fill transform transition-transform duration-100 ${
+                          isMenuProviderOpenEdit ? "rotate-180" : "rotate-0"
+                        }`}
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                      </svg>
+                    </div>
+                    {isMenuProviderOpenEdit && (
+                      <div className="absolute z-10 top-12 flex flex-col gap-y-2 bg-white dark:bg-[#16171a] p-2 rounded-lg w-full ring-1 ring-zinc-200 dark:ring-zinc-600">
+                        {[
+                          {
+                            nama: "Digiflazz",
+                            value: "digiflazz",
+                          },
+                          {
+                            nama: "Vip Reseller",
+                            value: "vip",
+                          },
+                          {
+                            nama: "API Games",
+                            value: "apigames",
+                          },
+                          {
+                            nama: "MooGold",
+                            value: "moogold",
+                          },
+                          {
+                            nama: "Mobapay",
+                            value: "mobapay",
+                          },
+                          {
+                            nama: "Gamepointclub",
+                            value: "gamepoint",
+                          },
+                          {
+                            nama: "Bxystore",
+                            value: "bxystore",
+                          },
+                          {
+                            nama: "EvilBee",
+                            value: "evilbee",
+                          },
+                          {
+                            nama: "Mengtopup",
+                            value: "meng",
+                          },
+                          {
+                            nama: "Alpharamz",
+                            value: "alpha",
+                          },
+                          {
+                            nama: "Joki",
+                            value: "joki",
+                          },
+                          {
+                            nama: "Gift Skin",
+                            value: "gift_skin",
+                          },
+                          {
+                            nama: "DM Vilog",
+                            value: "dm_vilog",
+                          },
+                          {
+                            nama: "Manual",
+                            value: "manual",
+                          },
+                        ].map((providerOption) => (
+                          <div
+                            key={providerOption.nama}
+                            onClick={() =>
+                              handleProviderSelection(providerOption)
+                            }
+                            className="flex flex-row px-4 py-2 text-black dark:text-white cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:duration-300 rounded-lg z-50"
+                          >
+                            {providerOption.nama}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <label
+                    htmlFor="hargaMemberEdit"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Harga Member
+                  </label>
+                  <input
+                    id="hargaMemberEdit"
+                    type="number"
+                    placeholder="Harga Member"
+                    value={hargaMemberEdit}
+                    onChange={(e) => setHargaMemberEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="hargaGoldEdit"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Harga Gold
+                  </label>
+                  <input
+                    id="hargaGoldEdit"
+                    type="number"
+                    placeholder="Harga Gold"
+                    value={hargaGoldEdit}
+                    onChange={(e) => setHargaGoldEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="hargaPlatinumEdit"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Harga Platinum
+                  </label>
+                  <input
+                    id="hargaPlatinumEdit"
+                    type="number"
+                    placeholder="Harga Platinum"
+                    value={hargaPlatinumEdit}
+                    onChange={(e) => setHargaPlatinumEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="profitMemberEdit"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Profit Member
+                  </label>
+                  <input
+                    id="profitMemberEdit"
+                    type="number"
+                    placeholder="Profit Member"
+                    value={profitMemberEdit}
+                    onChange={(e) => setProfitMemberEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="profitGoldEdit"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Profit Gold
+                  </label>
+                  <input
+                    id="profitGoldEdit"
+                    type="number"
+                    placeholder="Profit Gold"
+                    value={profitGoldEdit}
+                    onChange={(e) => setProfitGoldEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="profitPlatinumEdit"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Profit Platinum
+                  </label>
+                  <input
+                    id="profitPlatinumEdit"
+                    type="number"
+                    placeholder="Profit Platinum"
+                    value={profitPlatinumEdit}
+                    onChange={(e) => setProfitPlatinumEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="modalAwalEdit"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Modal Awal
+                  </label>
+                  <input
+                    id="modalAwalEdit"
+                    type="number"
+                    placeholder="Modal Awal"
+                    value={modalAwalEdit}
+                    onChange={(e) => setModalAwalEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="providerIdEdit"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Provider ID
+                  </label>
+                  <input
+                    id="providerIdEdit"
+                    type="text"
+                    placeholder="Provider ID"
+                    value={providerIdEdit}
+                    onChange={(e) => setProviderIdEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="productLogoEdit"
+                    className="col-span-2 flex flex-row text-black dark:text-white pt-2"
+                  >
+                    Product Logo
+                  </label>
+                  <div className="col-span-6">
+                    <input
+                      id="productLogoEdit"
+                      ref={productLogoEditRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setProductLogoEdit(e.target.files[0])}
+                      className="bg-white dark:bg-[#16171a] w-full p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                    />
+                    <p className="text-error lg:text-base md:text-sm mt-2">
+                      *AKTIFKAN JIKA KAMU SEDANG MENGADAKAN FLASHSALE
+                    </p>
+                  </div>
+                  <label
+                    htmlFor="subKategori"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Flash Sale?
+                  </label>
+                  <div className="relative col-span-6 flex flex-col">
+                    <div
+                      onClick={toggleMenuFlashSale}
+                      className="flex flex-row items-center justify-between gap-3 text-black dark:text-white bg-white dark:bg-[#16171a] p-2.5 rounded-lg focus:outline focus:outline-offset-1 focus:outline-zinc-600 ring-1 ring-zinc-200 dark:ring-zinc-600 cursor-pointer"
+                    >
+                      {selectedFlashSaleEdit ? selectedFlashSaleEdit : "No"}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        fill="currentColor"
+                        className={`bi bi-caret-down-fill transform transition-transform duration-100 ${
+                          isMenuFlashSaleOpenEdit ? "rotate-180" : "rotate-0"
+                        }`}
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                      </svg>
+                    </div>
+                    {isMenuFlashSaleOpenEdit && (
+                      <div className="absolute z-10 top-12 flex flex-col gap-y-2 bg-white dark:bg-[#16171a] p-2 rounded-lg w-full ring-1 ring-zinc-200 dark:ring-zinc-600">
+                        {["No", "Yes"].map((isFlashSaleOption) => (
+                          <div
+                            key={isFlashSaleOption}
+                            onClick={() =>
+                              handleIsFlashSaleSelection(isFlashSaleOption)
+                            }
+                            className="flex flex-row px-4 py-2 text-black dark:text-white cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:duration-300 rounded-lg z-50"
+                          >
+                            {isFlashSaleOption}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <label
+                    htmlFor="judulFlashSaleEdit"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Judul Flash Sale
+                  </label>
+                  <input
+                    id="judulFlashSaleEdit"
+                    type="text"
+                    placeholder="Judul Flash Sale"
+                    value={judulFlashSaleEdit}
+                    onChange={(e) => setJudulFlashSaleEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="hargaFlashSaleEdit"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Harga Flash Sale
+                  </label>
+                  <input
+                    id="hargaFlashSaleEdit"
+                    type="number"
+                    placeholder="Harga Flash Sale"
+                    value={hargaFlashSaleEdit}
+                    onChange={(e) => setHargaFlashSaleEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="expiredFlashSaleEdit"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Expired Flash Sale
+                  </label>
+                  <input
+                    id="expiredFlashSaleEdit"
+                    type="date"
+                    placeholder="Expired Flash Sale"
+                    value={expiredFlashSaleEdit}
+                    onChange={(e) => setExpiredFlashSaleEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="bannerFlashSaleEdit"
+                    className="col-span-2 flex flex-row text-black dark:text-white pt-2"
+                  >
+                    Banner FlashSale
+                  </label>
+                  <input
+                    id="bannerFlashSaleEdit"
+                    ref={bannerFlashSaleEditRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setBannerFlashSaleEdit(e.target.files[0])}
+                    className="col-span-6 bg-white dark:bg-[#16171a] w-full p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                </div>
+              )}
+              {isProdukVoucher && (
+                <div className="grid grid-cols-8 gap-y-4 gap-x-2">
+                  <label
+                    htmlFor="kode"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Kode
+                  </label>
+                  <input
+                    id="kode"
+                    type="text"
+                    placeholder="Kode"
+                    value={kodeVoucherEdit}
+                    onChange={(e) => setKodeVoucherEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="persenanPromo"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Persenan Promo
+                  </label>
+                  <input
+                    id="persenanPromo"
+                    type="text"
+                    placeholder="Persenan Promo"
+                    value={persenanPromoEdit}
+                    onChange={(e) => setPersenanPromoEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="stock"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Stock
+                  </label>
+                  <input
+                    id="stock"
+                    type="text"
+                    placeholder="Stock"
+                    value={stockEdit}
+                    onChange={(e) => setStockEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="maxPotongan"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Max Potongan
+                  </label>
+                  <input
+                    id="maxPotongan"
+                    type="text"
+                    placeholder="Max Potongan"
+                    value={maxPotonganEdit}
+                    onChange={(e) => setMaxPotonganEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                </div>
+              )}
+              {isKonfigurasiPayment && (
+                <div className="grid grid-cols-8 gap-y-4 gap-x-2">
+                  <label
+                    htmlFor="namaPayment"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Nama
+                  </label>
+                  <input
+                    id="namaPayment"
+                    type="text"
+                    placeholder="Nama"
+                    value={namaPaymentEdit}
+                    onChange={(e) => setNamaPaymentEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="kodePayment"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Kode
+                  </label>
+                  <input
+                    id="kodePayment"
+                    type="text"
+                    placeholder="Kode"
+                    value={kodePaymentEdit}
+                    onChange={(e) => setKodePaymentEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="keteranganPayment"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Keterangan
+                  </label>
+                  <input
+                    id="keteranganPayment"
+                    type="text"
+                    placeholder="Keterangan"
+                    value={keteranganPaymentEdit}
+                    onChange={(e) => setKeteranganPaymentEdit(e.target.value)}
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                  />
+                  <label
+                    htmlFor="tipePayment"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Tipe
+                  </label>
+                  <div className="relative col-span-6 flex flex-col">
+                    <div
+                      onClick={toggleMenuTipePayment}
+                      className="flex flex-row items-center justify-between gap-3 text-black dark:text-white bg-white dark:bg-[#16171a] p-2.5 rounded-lg focus:outline focus:outline-offset-1 focus:outline-zinc-600 ring-1 ring-zinc-200 dark:ring-zinc-600 cursor-pointer"
+                    >
+                      {selectedTipePaymentEdit
+                        ? selectedTipePaymentEdit.nama
+                        : "Pilih Tipe"}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        fill="currentColor"
+                        className={`bi bi-caret-down-fill transform transition-transform duration-100 ${
+                          isMenuTipePaymentEditOpen ? "rotate-180" : "rotate-0"
+                        }`}
+                        viewBox="0 0 16 16"
+                      >
+                        <images d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                      </svg>
+                    </div>
+                    {isMenuTipePaymentEditOpen && (
+                      <div className="absolute top-12 flex flex-col gap-y-2 bg-white dark:bg-[#16171a] p-2 rounded-lg w-full ring-1 ring-zinc-200 dark:ring-zinc-600">
+                        {tipePaymentEdit.map((tipeOption) => (
+                          <div
+                            key={tipeOption.nama}
+                            onClick={() =>
+                              handleTipePaymentEditSelection(tipeOption)
+                            }
+                            className="flex flex-row px-4 py-2 text-black dark:text-white cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:duration-300 rounded-lg z-50"
+                          >
+                            {tipeOption.nama}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <label
+                    htmlFor="gambarPaymentEdit"
+                    className="col-span-2 flex flex-row items-center text-black dark:text-white"
+                  >
+                    Pilih Gambar
+                  </label>
+                  <input
+                    id="gambarPaymentEdit"
+                    ref={gambarEditRef}
+                    type="file"
+                    onChange={(e) => setGambarPaymentEdit(e.target.files[0])}
+                    accept="image/*"
+                    className="col-span-6 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
                   />
                 </div>
               )}

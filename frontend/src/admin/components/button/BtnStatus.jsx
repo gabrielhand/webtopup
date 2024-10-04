@@ -87,13 +87,30 @@ const BtnStatus = ({ orderId, Id, status, isLast, isSecondLast }) => {
     }
   };
 
+  const updateStatusLayanan = async (newStatus) => {
+    try {
+      const response = await axios.patch(
+        `http://localhost:5000/layananforadmin/status/update/${Id}`,
+        { status: newStatus }
+      );
+
+      setStatusEdit(newStatus);
+      setMenuStatusOpen(false);
+      console.log(response.data.msg);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   const bgColor =
     statusEdit === "Success" ||
     statusEdit === "available" ||
     statusEdit === "Sukses" ||
     statusEdit === "active"
       ? "bg-green-500"
-      : statusEdit === "Batal" || statusEdit === "unactive"
+      : statusEdit === "Batal" ||
+        statusEdit === "unactive" ||
+        statusEdit === "unavailable"
       ? "bg-red-500"
       : "bg-yellow-500";
 
@@ -102,6 +119,8 @@ const BtnStatus = ({ orderId, Id, status, isLast, isSecondLast }) => {
   const isPesananDmVilog = location.pathname === "/pesanan/dmvilog";
   const isProdukKategori = location.pathname === "/produk/kategori";
   const isProdukSubKategori = location.pathname === "/produk/subkategori";
+  const isProdukLayanan = location.pathname === "/produk/layanan";
+  const isProdukVoucher = location.pathname === "/produk/voucher";
 
   return (
     <div className="relative flex flex-col">
@@ -178,6 +197,8 @@ const BtnStatus = ({ orderId, Id, status, isLast, isSecondLast }) => {
           ? ["Sukses", "Proses"]
           : isProdukKategori
           ? ["active", "unactive"]
+          : isProdukLayanan
+          ? ["available", "unavailable"]
           : ["Success", "Batal", "Pending"]
         ).map((option) => (
           <div
@@ -191,6 +212,8 @@ const BtnStatus = ({ orderId, Id, status, isLast, isSecondLast }) => {
                 ? updateStatusPembelianDmVilog(option)
                 : isProdukKategori
                 ? updateStatusKategori(option)
+                : isProdukLayanan
+                ? updateStatusLayanan(option)
                 : updateStatusPembelian(option)
             }
             className="flex flex-row items-center px-3 py-2 justify-between gap-x-2 bg-transparent hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:duration-300 rounded-lg cursor-pointer"

@@ -2,6 +2,18 @@ import Tipe from "../models/TipeModel.js";
 
 export const getTipe = async (req, res) => {
   try {
+    const tipe = await Tipe.findAll();
+
+    return res.status(200).json(tipe);
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const getTipeForAdmin = async (req, res) => {
+  try {
     const { page = 1, limit = 5, name } = req.query;
     let whereCondition = {};
 
@@ -25,7 +37,7 @@ export const getTipe = async (req, res) => {
   }
 };
 
-export const addTipe = async (req, res) => {
+export const addTipeForAdmin = async (req, res) => {
   try {
     const namaTipe = req.body.name;
 
@@ -43,7 +55,7 @@ export const addTipe = async (req, res) => {
   }
 };
 
-export const getTipeById = async (req, res) => {
+export const getTipeByIdForAdmin = async (req, res) => {
   try {
     const tipe = await Tipe.findOne({
       where: {
@@ -63,7 +75,7 @@ export const getTipeById = async (req, res) => {
   }
 };
 
-export const updateTipe = async (req, res) => {
+export const updateTipeForAdmin = async (req, res) => {
   try {
     const namaTipe = req.body.name;
 
@@ -100,7 +112,7 @@ export const updateTipe = async (req, res) => {
   }
 };
 
-export const deleteTipe = async (req, res) => {
+export const deleteTipeForAdmin = async (req, res) => {
   try {
     const tipeId = req.params.id;
 

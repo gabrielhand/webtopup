@@ -1,12 +1,13 @@
 import express from "express";
-import { addTipe, getTipe, updateTipe, getTipeById, deleteTipe } from "../controllers/TipeController.js";
+import { getTipe, getTipeForAdmin, addTipeForAdmin, getTipeByIdForAdmin, updateTipeForAdmin, deleteTipeForAdmin } from "../controllers/TipeController.js";
 
 const router = express.Router();
 
 router.get("/tipe", getTipe);
-router.post("/tipe/create", addTipe);
-router.get("/tipe/get/:id", getTipeById);
-router.patch("/tipe/update/:id", updateTipe);
-router.delete("/tipe/delete/:id", deleteTipe);
+router.get("/tipeforadmin", getTipeForAdmin);
+router.post("/tipeforadmin/create", addTipeForAdmin);
+router.get("/tipeforadmin/get/:id", getTipeByIdForAdmin);
+router.patch("/tipeforadmin/update/:id", updateTipeForAdmin);
+router.delete("/tipeforadmin/delete/:id", deleteTipeForAdmin);
 
 export default router;

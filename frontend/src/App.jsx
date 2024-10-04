@@ -23,6 +23,9 @@ import Kategori from "./admin/page/produk/Kategori";
 import SubKategori from "./admin/page/produk/SubKategori";
 import Tipe from "./admin/page/produk/Tipe";
 import Layanan from "./admin/page/produk/Layanan";
+import Voucher from "./admin/page/produk/Voucher";
+import Slider from "./admin/page/setting/Slider";
+import Payment from "./admin/page/setting/Payment";
 
 const router = (settingweb, isDarkMode, toggleDarkMode) =>
   createBrowserRouter([
@@ -114,6 +117,18 @@ const router = (settingweb, isDarkMode, toggleDarkMode) =>
           element: <KelolaMember />,
         },
         {
+          path: "/settings/slider",
+          element: <Slider />,
+        },
+        {
+          path: "/settings/payment",
+          element: <Payment />,
+        },
+        {
+          path: "/settings/website",
+          element: <Slider />,
+        },
+        {
           path: "/produk/kategori",
           element: <Kategori />,
         },
@@ -131,7 +146,7 @@ const router = (settingweb, isDarkMode, toggleDarkMode) =>
         },
         {
           path: "/produk/voucher",
-          element: <Layanan />,
+          element: <Voucher />,
         },
       ],
     },

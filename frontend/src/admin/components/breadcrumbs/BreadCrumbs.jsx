@@ -15,6 +15,9 @@ const BreadCrumbs = () => {
   const isProdukTipe = location.pathname === "/produk/tipe";
   const isProdukLayanan = location.pathname === "/produk/layanan";
   const isProdukVoucher = location.pathname === "/produk/voucher";
+  const isKonfigurasiSlider = location.pathname === "/settings/slider";
+  const isKonfigurasiPayment = location.pathname === "/settings/payment";
+  const isKonfigurasiWebsite = location.pathname === "/settings/website";
 
   return (
     <div className="flex flex-row justify-end mt-4">
@@ -71,6 +74,10 @@ const BreadCrumbs = () => {
                       isProdukLayanan ||
                       isProdukVoucher
                     ? "Produk"
+                    : isKonfigurasiSlider ||
+                      isKonfigurasiPayment ||
+                      isKonfigurasiWebsite
+                    ? "Konfigurasi"
                     : ""}
                 </Link>
               </li>
@@ -98,6 +105,12 @@ const BreadCrumbs = () => {
                     ? "Layanan"
                     : isProdukVoucher
                     ? "Voucher"
+                    : isKonfigurasiSlider
+                    ? "Slider"
+                    : isKonfigurasiPayment
+                    ? "Payment"
+                    : isKonfigurasiWebsite
+                    ? "Website"
                     : ""}
                 </p>
               </li>

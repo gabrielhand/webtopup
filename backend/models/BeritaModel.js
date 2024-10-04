@@ -5,6 +5,9 @@ const Berita = db.define('beritas', {
     path: {
         type: Sequelize.STRING
     },
+    path_filename: {
+        type: Sequelize.STRING
+    },
     tipe: {
         type: Sequelize.STRING
     },

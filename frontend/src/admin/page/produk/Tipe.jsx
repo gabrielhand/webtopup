@@ -33,7 +33,7 @@ const Tipe = () => {
   const getTipe = async (page = 1, name = "") => {
     setLoading(true);
     try {
-      let url = `http://localhost:5000/tipe?page=${page}&limit=${limit}`;
+      let url = `http://localhost:5000/tipeforadmin?page=${page}&limit=${limit}`;
 
       if (name) {
         url += `&name=${name}`;
@@ -114,7 +114,7 @@ const Tipe = () => {
         </form>
       </div>
       <div className="flex flex-row text-2xl text-black dark:text-white font-semibold">
-        Daftar Semua Sub Kategori
+        Daftar Semua Tipe
       </div>
       <div className="flex flex-row items-center justify-between gap-x-3">
         <div className="flex flex-row gap-x-3">

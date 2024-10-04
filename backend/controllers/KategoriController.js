@@ -436,6 +436,11 @@ export const updateKategoriForAdmin = async (req, res) => {
             msg: "File thumbnail tidak valid atau ukuran terlalu besar!",
           });
         }
+
+        if (kategori.thumbnail_filename) {
+          const filepath = `./public/assets/thumbnail/${kategori.thumbnail_filename}`;
+          fs.unlinkSync(filepath);
+        }
     
         thumbnailFile.mv(
           `./public/assets/thumbnail/${thumbnailFileName}`,
@@ -457,6 +462,11 @@ export const updateKategoriForAdmin = async (req, res) => {
             msg: "File banner layanan tidak valid atau ukuran terlalu besar!",
           });
         }
+
+        if (kategori.bannerlayanan_filename) {
+          const filepath = `./public/assets/bannerlayanan/${kategori.bannerlayanan_filename}`;
+          fs.unlinkSync(filepath);
+        }
     
         bannerLayananFile.mv(
           `./public/assets/bannerlayanan/${bannerLayananFileName}`,
@@ -477,6 +487,11 @@ export const updateKategoriForAdmin = async (req, res) => {
           return res.status(422).json({
             msg: "File petunjuk tidak valid atau ukuran terlalu besar!",
           });
+        }
+
+        if (kategori.petunjuk_filename) {
+          const filepath = `./public/assets/petunjuk/${kategori.petunjuk_filename}`;
+          fs.unlinkSync(filepath);
         }
     
         petunjukFile.mv(
