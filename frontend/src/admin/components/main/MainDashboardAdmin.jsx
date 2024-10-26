@@ -7,7 +7,12 @@ import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { getMe } from "../../../features/authSlices";
 
-const MainDashboardAdmin = ({ settingweb, isDarkMode, toggleDarkMode }) => {
+const MainDashboardAdmin = ({
+  settingweb,
+  isDarkMode,
+  toggleDarkMode,
+  getSettingWeb,
+}) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -64,6 +69,8 @@ const MainDashboardAdmin = ({ settingweb, isDarkMode, toggleDarkMode }) => {
             context={{
               logoHeader: settingweb.logo_header,
               user: user,
+              settingWeb: settingweb,
+              getSettingWeb: getSettingWeb,
             }}
           />
         </div>
@@ -80,6 +87,7 @@ MainDashboardAdmin.propTypes = {
   }).isRequired,
   isDarkMode: PropTypes.bool.isRequired,
   toggleDarkMode: PropTypes.func.isRequired,
+  getSettingWeb: PropTypes.func.isRequired,
 };
 
 export default MainDashboardAdmin;

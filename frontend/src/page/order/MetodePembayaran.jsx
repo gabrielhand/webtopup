@@ -3,7 +3,13 @@ import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import GopayImage from "../../assets/gopay_image.png";
 
-const MetodePembayaran = ({ methods, totalPrice, isDisabled }) => {
+const MetodePembayaran = ({
+  methods,
+  totalPrice,
+  selectedPayment,
+  setSelectedPayment,
+  isDisabled,
+}) => {
   const eMoneyMetode = methods.filter((method) => method.tipe === "e-walet");
   const vAccountMetode = methods.filter(
     (method) => method.tipe === "virtual-account"
@@ -19,6 +25,8 @@ const MetodePembayaran = ({ methods, totalPrice, isDisabled }) => {
 
   const { logoHeader } = useOutletContext();
 
+  const [selectedClass, setSelectedClass] = useState("");
+
   const toggleEMoney = () => {
     setIsMetOpen(!isEMoneyOpen);
   };
@@ -33,6 +41,12 @@ const MetodePembayaran = ({ methods, totalPrice, isDisabled }) => {
 
   const toggleSaldo = () => {
     setIsSaldoOpen(!isSaldoOpen);
+  };
+
+  const handlePaymentSelect = (code) => {
+    setSelectedPayment(code);
+
+    setSelectedClass("duration-100 outline outline-blue-500");
   };
 
   return (
@@ -77,12 +91,23 @@ const MetodePembayaran = ({ methods, totalPrice, isDisabled }) => {
               <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
             </svg>
           </button>
-          <div className="flex flex-col gap-y-3 px-3">
+          <div className="flex flex-col gap-y-3 px-3 py-0.5">
             {eMoneyMetode.map((emethod) => (
-              <div
+              <label
                 key={emethod.id}
-                className="flex flex-col w-full rounded-xl text-black p-2 bg-white shadow-lg"
+                htmlFor={`method-${emethod.id}`}
+                className={`flex flex-col w-full rounded-xl text-black p-2 bg-white shadow-lg ${
+                  selectedPayment === emethod.code ? selectedClass : ""
+                }`}
+                onClick={() => handlePaymentSelect(emethod.code)}
               >
+                <input
+                  id={`method-${emethod.id}`}
+                  value={emethod.code}
+                  type="radio"
+                  name="pembayaran"
+                  className="hidden"
+                />
                 <div className="flex flex-col gap-y-2 w-full">
                   <figure className="flex flex-row justify-end w-full">
                     <img
@@ -104,7 +129,7 @@ const MetodePembayaran = ({ methods, totalPrice, isDisabled }) => {
                 <div className="flex flex-row justify-end w-full text-sm font-light">
                   {emethod.name}
                 </div>
-              </div>
+              </label>
             ))}
           </div>
           <div className="flex flex-row gap-x-2 w-full">
@@ -138,12 +163,23 @@ const MetodePembayaran = ({ methods, totalPrice, isDisabled }) => {
               <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
             </svg>
           </button>
-          <div className="flex flex-col gap-y-3 px-3 overflow-auto">
+          <div className="flex flex-col gap-y-3 px-3 py-0.5 overflow-auto">
             {vAccountMetode.map((vamethod) => (
-              <div
+              <label
                 key={vamethod.id}
-                className="flex flex-col w-full rounded-xl text-black p-2 bg-white shadow-lg"
+                htmlFor={`method-${vamethod.id}`}
+                className={`flex flex-col w-full rounded-xl text-black p-2 bg-white shadow-lg ${
+                  selectedPayment === vamethod.code ? selectedClass : ""
+                }`}
+                onClick={() => handlePaymentSelect(vamethod.code)}
               >
+                <input
+                  id={`method-${vamethod.id}`}
+                  value={vamethod.code}
+                  type="radio"
+                  name="pembayaran"
+                  className="hidden"
+                />
                 <div className="flex flex-col gap-y-2 w-full">
                   <figure className="flex flex-row justify-end w-full">
                     <img
@@ -165,7 +201,7 @@ const MetodePembayaran = ({ methods, totalPrice, isDisabled }) => {
                 <div className="flex flex-row justify-end w-full text-sm font-light">
                   {vamethod.name}
                 </div>
-              </div>
+              </label>
             ))}
           </div>
           <div className="flex flex-row gap-x-2 w-full">
@@ -199,12 +235,23 @@ const MetodePembayaran = ({ methods, totalPrice, isDisabled }) => {
               <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
             </svg>
           </button>
-          <div className="flex flex-col gap-y-3 px-3">
+          <div className="flex flex-col gap-y-3 px-3 py-0.5">
             {cStoreMetode.map((csmethod) => (
-              <div
+              <label
                 key={csmethod.id}
-                className="flex flex-col w-full rounded-xl text-black p-2 bg-white shadow-lg"
+                htmlFor={`method-${csmethod.id}`}
+                className={`flex flex-col w-full rounded-xl text-black p-2 bg-white shadow-lg ${
+                  selectedPayment === csmethod.code ? selectedClass : ""
+                }`}
+                onClick={() => handlePaymentSelect(csmethod.code)}
               >
+                <input
+                  id={`method-${csmethod.id}`}
+                  value={csmethod.code}
+                  type="radio"
+                  name="pembayaran"
+                  className="hidden"
+                />
                 <div className="flex flex-col gap-y-2 w-full">
                   <figure className="flex flex-row justify-end w-full">
                     <img
@@ -226,7 +273,7 @@ const MetodePembayaran = ({ methods, totalPrice, isDisabled }) => {
                 <div className="flex flex-row justify-end w-full text-sm font-light">
                   {csmethod.name}
                 </div>
-              </div>
+              </label>
             ))}
           </div>
           <div className="flex flex-row gap-x-2 w-full">
@@ -260,8 +307,21 @@ const MetodePembayaran = ({ methods, totalPrice, isDisabled }) => {
               <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
             </svg>
           </button>
-          <div className="flex flex-col gap-y-3 px-3">
-            <div className="flex flex-col w-full rounded-xl text-black p-2 bg-white shadow-lg">
+          <div className="flex flex-col gap-y-3 px-3 py-0.5">
+            <label
+              htmlFor="SALDO"
+              className={`flex flex-col w-full rounded-xl text-black p-2 bg-white shadow-lg ${
+                selectedPayment === "SALDO" ? selectedClass : ""
+              }`}
+              onClick={() => handlePaymentSelect("SALDO")}
+            >
+              <input
+                id="SALDO"
+                value="SALDO"
+                type="radio"
+                name="pembayaran"
+                className="hidden"
+              />
               <div className="flex flex-col gap-y-2 w-full">
                 <figure className="flex flex-row justify-end w-full">
                   <img
@@ -283,7 +343,7 @@ const MetodePembayaran = ({ methods, totalPrice, isDisabled }) => {
               <div className="flex flex-row justify-end w-full text-sm font-light">
                 Saldo Akun
               </div>
-            </div>
+            </label>
           </div>
           <div className="flex flex-row gap-x-2 w-full">
             <div className="grayscale-image-method grayscale relative lg:w-14 md:w-12 w-8 h-full"></div>
@@ -302,6 +362,8 @@ MetodePembayaran.propTypes = {
     })
   ).isRequired,
   totalPrice: PropTypes.number.isRequired,
+  selectedPayment: PropTypes.any,
+  setSelectedPayment: PropTypes.func,
   isDisabled: PropTypes.bool.isRequired,
 };
 

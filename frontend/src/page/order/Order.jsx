@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import LoaderBanner from "../../components/loader/LoaderBanner.jsx";
 import BannerOrder from "./BannerOrder.jsx";
@@ -33,6 +33,28 @@ const Order = () => {
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
 
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [userId, setUserId] = useState("");
+  const [zone, setZone] = useState("");
+
+  const [selectedPayment, setSelectedPayment] = useState(null);
+
+  const [kodeVoucher, setKodeVoucher] = useState("");
+
+  const [nomor, setNomor] = useState(null);
+
+  const modalKonfirmasiOrder = useRef(null);
+
+  const [kategoriLayanan, setKategoriLayanan] = useState([]);
+  const [nickname, setNickname] = useState("");
+  const [Id, setId] = useState("");
+  const [zoneId, setZoneId] = useState("");
+  const [layanan, setLayanan] = useState("");
+  const [harga, setHarga] = useState("");
+  const [payment, setPayment] = useState("");
+  const [nomorWa, setNomorWa] = useState("");
+
   const handleSectionChange = (section) => {
     setActiveSection(section);
   };
@@ -58,6 +80,40 @@ const Order = () => {
 
     setRating(response.data);
     setIsLoadingRat(false);
+  };
+
+  const konfirmasiOrder = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("uid", userId);
+      formData.append("zone", zone);
+      formData.append("service", selectedNominal);
+      formData.append("payment_method", selectedPayment);
+      formData.append("nomor", nomor);
+      formData.append("voucher", kodeVoucher);
+
+      const response = await axios.post(
+        "http://localhost:5000/order/konfirmasi-data",
+        formData
+      );
+
+      setKategoriLayanan(response.data.kategori);
+      setNickname(response.data.username);
+      setId(response.data.user_id);
+      setZoneId(response.data.zone);
+      setLayanan(response.data.layanan);
+      setHarga(response.data.harga);
+      setPayment(response.data.paymentMethod.name);
+      setNomorWa(response.data.nomor);
+      modalKonfirmasiOrder.current.showModal();
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error.message);
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -111,6 +167,7 @@ const Order = () => {
 
   const ForDetailAkun = {
     kode: kategori?.data?.kode,
+    server_id: kategori?.data.server_id,
     placeholder_1: kategori?.data?.placeholder_1,
     placeholder_2: kategori?.data?.placeholder_2,
     ket_id: kategori?.data?.ket_id,
@@ -274,15 +331,36 @@ const Order = () => {
                     : "w-0 opacity-0 z-10"
                 }`}
               >
-                <DetailAkun detailAkun={ForDetailAkun} />
-                <Quantity quantity={quantity} setQuantity={setQuantity} />
-                <KodePromo />
-                <MetodePembayaran
-                  methods={isLoadingMet ? null : methods}
-                  totalPrice={totalPrice}
-                  isDisabled={!selectedNominal}
+                <DetailAkun
+                  kode={kategori.kode}
+                  userId={userId}
+                  setUserId={setUserId}
+                  zone={zone}
+                  setZone={setZone}
+                  detailAkun={ForDetailAkun}
                 />
-                <Konfirmasi />
+                <Quantity quantity={quantity} setQuantity={setQuantity} />
+                <KodePromo
+                  kodeVoucher={kodeVoucher}
+                  setKodeVoucher={setKodeVoucher}
+                />
+                {isLoadingMet ? (
+                  "Loading..."
+                ) : (
+                  <MetodePembayaran
+                    methods={methods}
+                    totalPrice={totalPrice}
+                    selectedPayment={selectedPayment}
+                    setSelectedPayment={setSelectedPayment}
+                    isDisabled={!selectedNominal}
+                  />
+                )}
+                <Konfirmasi
+                  nomor={nomor}
+                  setNomor={setNomor}
+                  isLoading={isLoading}
+                  konfirmasiOrder={konfirmasiOrder}
+                />
               </div>
               <div
                 className={`flex flex-col gap-y-3 transition-all duration-500 ${
@@ -297,6 +375,83 @@ const Order = () => {
           </div>
         </div>
       )}
+      <dialog
+        id="modal_confirm_order"
+        className="modal"
+        ref={modalKonfirmasiOrder}
+      >
+        <div className="relative flex flex-col gap-4 p-4 rounded-xl w-6/12 overflow-hidden max-w-5xl bg-white dark:bg-[#161721]">
+          <div className="flex flex-col items-center">
+            <h3 className="font-semibold text-xl text-black dark:text-white">
+              Konfirmasi Pesanan Kamu
+            </h3>
+            <p className="text-black dark:text-white font-light">
+              Pastikan semua sudah sesuai ya!
+            </p>
+            <div className="mt-4 flex flex-col gap-2 items-center">
+              <img
+                src={kategoriLayanan.thumbnail}
+                alt={`Thumbnail-${kategoriLayanan.nama}`}
+                className="w-20 rounded-sm"
+              />
+              <p className="text-black dark:text-white font-light">
+                {kategoriLayanan.nama}
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2 p-3 rounded-lg bg-zinc-300 dark:bg-black">
+            <div className="flex flex-row justify-between">
+              <p className="font-medium text-black dark:text-white">Nickname</p>
+              <p className="text-black dark:text-white">{nickname}</p>
+            </div>
+            <div className="flex flex-row justify-between">
+              <p className="font-medium text-black dark:text-white">ID</p>
+              <p className="text-black dark:text-white">{Id}</p>
+            </div>
+            <div className="flex flex-row justify-between">
+              <p className="font-medium text-black dark:text-white">Server</p>
+              <p className="text-black dark:text-white">{zoneId}</p>
+            </div>
+            <div className="flex flex-row justify-between">
+              <p className="font-medium text-black dark:text-white">Layanan</p>
+              <p className="text-black dark:text-white">{layanan}</p>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2 p-3 rounded-lg bg-zinc-300 dark:bg-black">
+            <div className="flex flex-row justify-between">
+              <p className="font-medium text-black dark:text-white">Payment</p>
+              <p className="text-black dark:text-white">{payment}</p>
+            </div>
+            <div className="flex flex-row justify-between">
+              <p className="font-medium text-black dark:text-white">Harga</p>
+              <p className="text-black dark:text-white">
+                Rp{" "}
+                {harga.toLocaleString("id-ID", {
+                  styles: "currency",
+                  currency: "IDR",
+                })}
+              </p>
+            </div>
+            <div className="flex flex-row justify-between">
+              <p className="font-medium text-black dark:text-white">Kontak</p>
+              <p className="text-black dark:text-white">{nomorWa}</p>
+            </div>
+          </div>
+          <form method="dialog">
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+              ✕
+            </button>
+          </form>
+          <div className="flex flex-row justify-end">
+            <button
+              type="button"
+              className="px-10 py-2 bg-blue-500 rounded-lg text-white font-medium"
+            >
+              Pesan Sekarang!
+            </button>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };

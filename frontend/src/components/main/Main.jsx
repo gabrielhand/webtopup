@@ -33,9 +33,9 @@ const Main = ({ settingweb, isDarkMode, toggleDarkMode }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  
+
   useEffect(() => {
-    dispatch(getMe())
+    dispatch(getMe());
   }, [dispatch]);
 
   useEffect(() => {
@@ -49,7 +49,9 @@ const Main = ({ settingweb, isDarkMode, toggleDarkMode }) => {
   }, [location]);
 
   useEffect(() => {
-    document.title = settingweb ? settingweb.judul_web : import.meta.env.VITE_APP_NAME;
+    document.title = settingweb
+      ? settingweb.judul_web
+      : import.meta.env.VITE_APP_NAME;
 
     const favicon = document.getElementById("favicon");
     if (favicon) {
@@ -72,7 +74,13 @@ const Main = ({ settingweb, isDarkMode, toggleDarkMode }) => {
       }`}
     >
       <Loading />
-      <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} user={user} logOut={logOut} logoHeader={settingweb.logo_header} />
+      <Navbar
+        isDarkMode={isDarkMode}
+        toggleDarkMode={toggleDarkMode}
+        user={user}
+        logOut={logOut}
+        logoHeader={settingweb.logo_header}
+      />
       <ModalSearch />
       <div className="min-h-screen">
         <Outlet
@@ -81,7 +89,7 @@ const Main = ({ settingweb, isDarkMode, toggleDarkMode }) => {
             bannerAllGames: settingweb.banner_allgames,
             bannerCekTransaksi: settingweb.banner_cek_transaksi,
             bannerServices: settingweb.banner_services,
-            bannerDbUser: settingweb.banner_user_profile
+            bannerDbUser: settingweb.banner_db_user,
           }}
         />
       </div>
@@ -97,7 +105,7 @@ Main.propTypes = {
     banner_allgames: PropTypes.string,
     banner_cek_transaksi: PropTypes.string,
     banner_services: PropTypes.string,
-    banner_user_profile: PropTypes.string,
+    banner_db_user: PropTypes.string,
   }).isRequired,
   isDarkMode: PropTypes.bool.isRequired,
   toggleDarkMode: PropTypes.func.isRequired,

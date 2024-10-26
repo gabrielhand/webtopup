@@ -26,8 +26,10 @@ import Layanan from "./admin/page/produk/Layanan";
 import Voucher from "./admin/page/produk/Voucher";
 import Slider from "./admin/page/setting/Slider";
 import Payment from "./admin/page/setting/Payment";
+import Website from "./admin/page/setting/website/Website";
+import Invoice from "./page/invoice/Invoice";
 
-const router = (settingweb, isDarkMode, toggleDarkMode) =>
+const router = (settingweb, isDarkMode, toggleDarkMode, getSettingWeb) =>
   createBrowserRouter([
     {
       element: (
@@ -59,6 +61,10 @@ const router = (settingweb, isDarkMode, toggleDarkMode) =>
           element: <Order />,
         },
         {
+          path: "/invoice/:order",
+          element: <Invoice />,
+        },
+        {
           element: <MainDashboardUser />,
           children: [
             {
@@ -83,6 +89,7 @@ const router = (settingweb, isDarkMode, toggleDarkMode) =>
       element: (
         <MainDashboardAdmin
           settingweb={settingweb}
+          getSettingWeb={getSettingWeb}
           isDarkMode={isDarkMode}
           toggleDarkMode={toggleDarkMode}
         />
@@ -126,7 +133,7 @@ const router = (settingweb, isDarkMode, toggleDarkMode) =>
         },
         {
           path: "/settings/website",
-          element: <Slider />,
+          element: <Website />,
         },
         {
           path: "/produk/kategori",
@@ -182,7 +189,7 @@ function App() {
 
   return (
     <>
-      <RouterProvider router={router(settingweb, isDarkMode, toggleDarkMode)} />
+      <RouterProvider router={router(settingweb, isDarkMode, toggleDarkMode, getSettingWeb)} />
     </>
   );
 }

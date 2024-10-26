@@ -137,13 +137,20 @@ export const getKategoriByKode = async (req, res) => {
     };
     subkategori = [...subkategori, normalSubCategory];
 
-    const user = await User.findOne({
-      where: { id: req.session.userId },
-      attributes: ["role"],
-    });
+    const userId = req.session.userId;
 
-    let role = user ? user.role : "Member";
+    let role = "Member";
     let priceColumn;
+    if (userId) {
+      const user = await User.findOne({
+        where: { id: userId },
+        attributes: ["role"],
+      });
+
+      if (user) {
+        role = user.role;
+      }
+    }
 
     switch (role) {
       case "Gold":
@@ -178,7 +185,7 @@ export const getKategoriByKode = async (req, res) => {
     res.status(200).json({ data, subkategori, layanan });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -421,17 +428,22 @@ export const updateKategoriForAdmin = async (req, res) => {
       petunjukFileName = kategori.petunjuk_filename;
     } else {
       const thumbnailFile = req.files.thumbnail ? req.files.thumbnail : null;
-      const bannerLayananFile = req.files.bannerlayanan ? req.files.bannerlayanan : null;
+      const bannerLayananFile = req.files.bannerlayanan
+        ? req.files.bannerlayanan
+        : null;
       const petunjukFile = req.files.petunjuk ? req.files.petunjuk : null;
 
       const allowedType = [".png", ".jpg", ".jpeg"];
-    
+
       if (thumbnailFile) {
         const thumbnailFileSize = thumbnailFile.data.length;
         const thumbnailExt = path.extname(thumbnailFile.name);
         thumbnailFileName = thumbnailFile.md5 + "-" + Date.now() + thumbnailExt;
-        
-        if (!allowedType.includes(thumbnailExt.toLocaleLowerCase()) || thumbnailFileSize > 5000000) {
+
+        if (
+          !allowedType.includes(thumbnailExt.toLocaleLowerCase()) ||
+          thumbnailFileSize > 5000000
+        ) {
           return res.status(422).json({
             msg: "File thumbnail tidak valid atau ukuran terlalu besar!",
           });
@@ -441,7 +453,7 @@ export const updateKategoriForAdmin = async (req, res) => {
           const filepath = `./public/assets/thumbnail/${kategori.thumbnail_filename}`;
           fs.unlinkSync(filepath);
         }
-    
+
         thumbnailFile.mv(
           `./public/assets/thumbnail/${thumbnailFileName}`,
           (err) => {
@@ -451,13 +463,17 @@ export const updateKategoriForAdmin = async (req, res) => {
       } else {
         thumbnailFileName = kategori.thumbnail_filename;
       }
-    
+
       if (bannerLayananFile) {
         const bannerLayananFileSize = bannerLayananFile.data.length;
         const bannerLayananExt = path.extname(bannerLayananFile.name);
-        bannerLayananFileName = bannerLayananFile.md5 + "-" + Date.now() + bannerLayananExt;
-    
-        if (!allowedType.includes(bannerLayananExt.toLocaleLowerCase()) || bannerLayananFileSize > 5000000) {
+        bannerLayananFileName =
+          bannerLayananFile.md5 + "-" + Date.now() + bannerLayananExt;
+
+        if (
+          !allowedType.includes(bannerLayananExt.toLocaleLowerCase()) ||
+          bannerLayananFileSize > 5000000
+        ) {
           return res.status(422).json({
             msg: "File banner layanan tidak valid atau ukuran terlalu besar!",
           });
@@ -467,7 +483,7 @@ export const updateKategoriForAdmin = async (req, res) => {
           const filepath = `./public/assets/bannerlayanan/${kategori.bannerlayanan_filename}`;
           fs.unlinkSync(filepath);
         }
-    
+
         bannerLayananFile.mv(
           `./public/assets/bannerlayanan/${bannerLayananFileName}`,
           (err) => {
@@ -477,13 +493,16 @@ export const updateKategoriForAdmin = async (req, res) => {
       } else {
         bannerLayananFileName = kategori.bannerlayanan_filename;
       }
-    
+
       if (petunjukFile) {
         const petunjukFileSize = petunjukFile.data.length;
         const petunjukExt = path.extname(petunjukFile.name);
         petunjukFileName = petunjukFile.md5 + "-" + Date.now() + petunjukExt;
-    
-        if (!allowedType.includes(petunjukExt.toLocaleLowerCase()) || petunjukFileSize > 5000000) {
+
+        if (
+          !allowedType.includes(petunjukExt.toLocaleLowerCase()) ||
+          petunjukFileSize > 5000000
+        ) {
           return res.status(422).json({
             msg: "File petunjuk tidak valid atau ukuran terlalu besar!",
           });
@@ -493,7 +512,7 @@ export const updateKategoriForAdmin = async (req, res) => {
           const filepath = `./public/assets/petunjuk/${kategori.petunjuk_filename}`;
           fs.unlinkSync(filepath);
         }
-    
+
         petunjukFile.mv(
           `./public/assets/petunjuk/${petunjukFileName}`,
           (err) => {
@@ -504,7 +523,6 @@ export const updateKategoriForAdmin = async (req, res) => {
         petunjukFileName = kategori.petunjuk_filename;
       }
     }
-    
 
     const thumbnailUrl = `${req.protocol}://${req.get(
       "host"

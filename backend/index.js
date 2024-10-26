@@ -18,6 +18,8 @@ import AuthRoute from "./routes/AuthRoute.js";
 import VoucherRoute from "./routes/VoucherRoute.js";
 import DataJokiRoute from "./routes/DataJokiRoute.js";
 import DepositRoute from "./routes/DepositRoute.js";
+import OrderRoute from "./routes/OrderRoute.js";
+import InvoiceRoute from "./routes/InvoiceRoute.js";
 import FileUpload from "express-fileupload";
 
 dotenv.config();
@@ -67,6 +69,8 @@ app.use(AuthRoute);
 app.use(VoucherRoute);
 app.use(DataJokiRoute);
 app.use(DepositRoute);
+app.use(OrderRoute);
+app.use(InvoiceRoute);
 
 // store.sync();
 

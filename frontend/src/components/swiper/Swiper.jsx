@@ -52,8 +52,8 @@ const MySwiper = () => {
       className="swiper_container"
     >
       {swipers.map((swiper, index) => (
-        <SwiperSlide  key={index}>
-          <img src={swiper.path} loading="lazy" alt={`Slide ${index}`}/>
+        <SwiperSlide key={index}>
+          <img src={swiper.path} loading="lazy" alt={`Slide ${index}`} className="max-h-72"/>
         </SwiperSlide>
       ))}
       <div className="slider-controller">

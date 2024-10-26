@@ -5,6 +5,7 @@ import Pembelian from "../models/PembelianModel.js";
 import DataJoki from "../models/DataJokiModel.js";
 import Pembayaran from "../models/PembayaranModel.js";
 import SubKategori from "../models/SubKategoriModel.js";
+import Method from "../models/MethodModel.js";
 
 Layanan.belongsTo(Kategori, { foreignKey: "kategori_id" });
 SubKategori.belongsTo(Kategori, { foreignKey: "category_id", targetKey: "id" });
@@ -25,12 +26,28 @@ Pembelian.belongsTo(Pembayaran, {
   foreignKey: "order_id",
   targetKey: "order_id",
 });
+Pembelian.hasOne(DataJoki, {
+  foreignKey: "order_id",
+  sourceKey: "order_id",
+  as: "dataJoki",
+});
 DataJoki.belongsTo(Pembelian, {
   foreignKey: "order_id",
   targetKey: "order_id",
 });
-DataJoki.belongsTo(Pembayaran, {
+DataJoki.hasOne(Pembayaran, {
   foreignKey: "order_id",
   targetKey: "order_id",
 });
-export { Layanan, Kategori, Tipe, Pembelian, DataJoki, SubKategori };
+Method.hasMany(Pembayaran, { foreignKey: "metode", sourceKey: "code" });
+Pembayaran.belongsTo(Method, { foreignKey: "metode", targetKey: "code" });
+export {
+  Layanan,
+  Kategori,
+  Tipe,
+  Pembelian,
+  Pembayaran,
+  Method,
+  DataJoki,
+  SubKategori,
+};

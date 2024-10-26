@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import BgLoginRegister from "../../assets/bg_login_register.png";
+import BgLoginRegister from "../../assets/bg_login_register.jpg";
 import Login from "./Login";
 import Register from "./Register";
 import Alert from "../../components/alert/Alert";
