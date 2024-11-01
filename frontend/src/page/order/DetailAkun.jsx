@@ -1,7 +1,23 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
-const DetailAkun = ({ userId, setUserId, zone, setZone, detailAkun }) => {
+const DetailAkun = ({
+  userId,
+  setUserId,
+  zone,
+  setZone,
+  emailJoki,
+  setEmailJoki,
+  passwordJoki,
+  setPasswordJoki,
+  requestJoki,
+  setRequestJoki,
+  catatanJoki,
+  setCatatanJoki,
+  nicknameJoki,
+  setNicknameJoki,
+  detailAkun,
+}) => {
   const [servers, setServer] = useState([]);
   const [selectedServer, setSelectedServer] = useState(null);
   const [isMenuServerOpen, setMenuServerOpen] = useState(null);
@@ -1031,7 +1047,130 @@ const DetailAkun = ({ userId, setUserId, zone, setZone, detailAkun }) => {
             </div>
           </div>
         </div>
-      ) : null}
+      ) : [
+          "populer",
+          "akun_premium",
+          "game",
+          "voucher",
+          "pulsa",
+          "e-money",
+          "pln",
+          "liveapp",
+        ].includes(detailAkun.tipe) ? (
+        <div className="grid grid-cols-1">
+          <div className="col-span-1 flex flex-col gap-y-3">
+            <p className="dark:text-white font-medium">Data</p>
+            <input
+              type="number"
+              name="ID ML"
+              autoComplete="off"
+              autoCorrect="off"
+              id="user_id"
+              value={userId || ""}
+              onChange={(e) => setUserId(e.target.value)}
+              autoSave="false"
+              placeholder={detailAkun.placeholder_1}
+              className="bg-slate-100 dark:bg-white dark:text-black w-full border border-gray-500 dark:border-gray-400 placeholder:font-normal placeholder:text-zinc-400 font-medium focus:outline focus:outline-2 focus:outline-offset-1 focus:outline-[#4169e1] rounded-xl px-4 py-2.5"
+            />
+          </div>
+        </div>
+      ) : detailAkun.kode == "joki" ? (
+        <div className="grid grid-cols-1 grid-rows-2 gap-x-2 gap-y-4">
+          <div className="col-span-1 flex flex-col gap-y-3">
+            <p className="dark:text-white font-medium">Email</p>
+            <input
+              type="email"
+              name="email_joki"
+              autoComplete="off"
+              autoCorrect="off"
+              id="email_joki"
+              value={emailJoki || ""}
+              onChange={(e) => setEmailJoki(e.target.value)}
+              autoSave="false"
+              placeholder={detailAkun.placeholder_1}
+              className="bg-slate-100 dark:bg-white dark:text-black w-full border border-gray-500 dark:border-gray-400 placeholder:font-normal placeholder:text-zinc-400 font-medium focus:outline focus:outline-2 focus:outline-offset-1 focus:outline-[#4169e1] rounded-xl px-4 py-2.5"
+            />
+          </div>
+          <div className="col-span-1 flex flex-col gap-y-3">
+            <p className="dark:text-white font-medium">Password</p>
+            <input
+              type="password"
+              name="password_joki"
+              autoComplete="off"
+              autoCorrect="off"
+              id="password_joki"
+              value={passwordJoki || ""}
+              onChange={(e) => setPasswordJoki(e.target.value)}
+              autoSave="false"
+              placeholder={detailAkun.placeholder_1}
+              className="bg-slate-100 dark:bg-white dark:text-black w-full border border-gray-500 dark:border-gray-400 placeholder:font-normal placeholder:text-zinc-400 font-medium focus:outline focus:outline-2 focus:outline-offset-1 focus:outline-[#4169e1] rounded-xl px-4 py-2.5"
+            />
+          </div>
+          <div className="col-span-1 flex flex-col gap-y-3">
+            <p className="dark:text-white font-medium">Request</p>
+            <input
+              type="text"
+              name="request_joki"
+              autoComplete="off"
+              autoCorrect="off"
+              id="request_joki"
+              value={requestJoki || ""}
+              onChange={(e) => setRequestJoki(e.target.value)}
+              autoSave="false"
+              placeholder={detailAkun.placeholder_1}
+              className="bg-slate-100 dark:bg-white dark:text-black w-full border border-gray-500 dark:border-gray-400 placeholder:font-normal placeholder:text-zinc-400 font-medium focus:outline focus:outline-2 focus:outline-offset-1 focus:outline-[#4169e1] rounded-xl px-4 py-2.5"
+            />
+          </div>
+          <div className="col-span-1 flex flex-col gap-y-3">
+            <p className="dark:text-white font-medium">Catatan</p>
+            <input
+              type="text"
+              name="catatan_joki"
+              autoComplete="off"
+              autoCorrect="off"
+              id="catatan_joki"
+              value={catatanJoki || ""}
+              onChange={(e) => setCatatanJoki(e.target.value)}
+              autoSave="false"
+              placeholder={detailAkun.placeholder_1}
+              className="bg-slate-100 dark:bg-white dark:text-black w-full border border-gray-500 dark:border-gray-400 placeholder:font-normal placeholder:text-zinc-400 font-medium focus:outline focus:outline-2 focus:outline-offset-1 focus:outline-[#4169e1] rounded-xl px-4 py-2.5"
+            />
+          </div>
+          <div className="col-span-1 flex flex-col gap-y-3">
+            <p className="dark:text-white font-medium">Nickname</p>
+            <input
+              type="text"
+              name="nickname_joki"
+              autoComplete="off"
+              autoCorrect="off"
+              id="nickname_joki"
+              value={nicknameJoki || ""}
+              onChange={(e) => setNicknameJoki(e.target.value)}
+              autoSave="false"
+              placeholder={detailAkun.placeholder_1}
+              className="bg-slate-100 dark:bg-white dark:text-black w-full border border-gray-500 dark:border-gray-400 placeholder:font-normal placeholder:text-zinc-400 font-medium focus:outline focus:outline-2 focus:outline-offset-1 focus:outline-[#4169e1] rounded-xl px-4 py-2.5"
+            />
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1">
+          <div className="col-span-1 flex flex-col gap-y-3">
+            <p className="dark:text-white font-medium">ID</p>
+            <input
+              type="number"
+              name="ID ML"
+              autoComplete="off"
+              autoCorrect="off"
+              id="user_id"
+              value={userId || ""}
+              onChange={(e) => setUserId(e.target.value)}
+              autoSave="false"
+              placeholder={detailAkun.placeholder_1}
+              className="bg-slate-100 dark:bg-white dark:text-black w-full border border-gray-500 dark:border-gray-400 placeholder:font-normal placeholder:text-zinc-400 font-medium focus:outline focus:outline-2 focus:outline-offset-1 focus:outline-[#4169e1] rounded-xl px-4 py-2.5"
+            />
+          </div>
+        </div>
+      )}
       <hr className="border-black dark:border-white"></hr>
       <p className="text-xs text-black dark:text-white">NB : </p>
       <div className="flex flex-row w-full bg-slate-100 dark:bg-white rounded-xl px-3 py-2 border border-[#4169e1]">
@@ -1048,11 +1187,22 @@ DetailAkun.propTypes = {
     placeholder_1: PropTypes.string.isRequired,
     placeholder_2: PropTypes.string.isRequired,
     ket_id: PropTypes.string.isRequired,
+    tipe: PropTypes.string,
   }).isRequired,
   userId: PropTypes.string,
   setUserId: PropTypes.func,
   zone: PropTypes.string,
   setZone: PropTypes.func,
+  emailJoki: PropTypes.string,
+  setEmailJoki: PropTypes.func,
+  passwordJoki: PropTypes.string,
+  setPasswordJoki: PropTypes.func,
+  requestJoki: PropTypes.string,
+  setRequestJoki: PropTypes.func,
+  catatanJoki: PropTypes.string,
+  setCatatanJoki: PropTypes.func,
+  nicknameJoki: PropTypes.string,
+  setNicknameJoki: PropTypes.func,
 };
 
 export default DetailAkun;

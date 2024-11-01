@@ -408,3 +408,118 @@ export const saveMutasiEWallet = async (req, res) => {
     });
   }
 };
+
+export const saveTentangKami = async (req, res) => {
+  try {
+    const {
+      sejarah,
+      sejarah_1,
+      visi,
+      misi,
+      nama_ceo,
+      deskripsi_ceo,
+      nama_bagan,
+      alamat,
+      email,
+      telp,
+    } = req.body;
+
+    const settingWeb = await SettingWeb.findOne({
+      where: {
+        id: 1,
+      },
+    });
+
+    let logoCeoFileName = "";
+    if (req.files === null) {
+      logoCeoFileName = settingWeb.logo_ceo_filename;
+    } else {
+      const logoCeoFile = req.files.logo_ceo;
+      const logoCeoFileSize = logoCeoFile.data.length;
+      const logoCeoExt = path.extname(logoCeoFile.name);
+      logoCeoFileName = logoCeoFile.md5 + "-" + Date.now() + logoCeoExt;
+      const allowedType = [".png", ".jpg", ".jpeg", ".gif"];
+
+      if (!allowedType.includes(logoCeoExt.toLocaleLowerCase()))
+        return res.status(422).json({
+          msg: "Maaf, jenis file ini tidak diizinkan!",
+        });
+      if (logoCeoFileSize > 5000000)
+        return res.status(422).json({
+          msg: "Maaf, ukuran image harus dibawah 5 MB!",
+        });
+
+      if (settingWeb.logo_ceo_filename) {
+        const filepath = `./public/assets/logo/${settingWeb.logo_ceo_filename}`;
+        fs.unlinkSync(filepath);
+      }
+
+      logoCeoFile.mv(`./public/assets/logo/${logoCeoFileName}`, (err) => {
+        if (err) return res.status(500).json({ msg: err.message });
+      });
+    }
+
+    const logoCeoUrl = `${req.protocol}://${req.get(
+      "host"
+    )}/assets/logo/${logoCeoFileName}`;
+
+    await SettingWeb.update(
+      {
+        logo_ceo: logoCeoUrl,
+        logo_ceo_filename: logoCeoFileName,
+        sejarah: sejarah,
+        sejarah_1: sejarah_1,
+        visi: visi,
+        misi: misi,
+        nama_ceo: nama_ceo,
+        deskripsi_ceo: deskripsi_ceo,
+        nama_bagan: nama_bagan,
+        alamat: alamat,
+        email: email,
+        telp: telp,
+      },
+      {
+        where: {
+          id: 1,
+        },
+      }
+    );
+
+    res.status(200).json({ msg: "Berhasil mengedit tentang kami!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const saveRate = async (req, res) => {
+  try {
+    const { rate_member, rate_gold, rate_platinum } = req.body;
+
+    if (!rate_member) {
+      return res.status(422).json({ msg: "Rate member tidak boleh kosong!" });
+    }
+    if (!rate_gold) {
+      return res.status(422).json({ msg: "Rate gold tidak boleh kosong!" });
+    }
+    if (!rate_platinum) {
+      return res.status(422).json({ msg: "Rate platinum tidak boleh kosong!" });
+    }
+
+    await SettingWeb.update(
+      {
+        rate_member: rate_member,
+        rate_gold: rate_gold,
+        rate_platinum: rate_platinum,
+      },
+      {
+        where: {
+          id: 1,
+        },
+      }
+    );
+
+    return res.status(200).json({ msg: "Berhasil mengedit rate!" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};

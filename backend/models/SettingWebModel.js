@@ -4,6 +4,15 @@ import db from "../config/database.js";
 const SettingWeb = db.define(
   "setting_webs",
   {
+    rate_member: {
+      type: Sequelize.INTEGER,
+    },
+    rate_gold: {
+      type: Sequelize.INTEGER,
+    },
+    rate_platinum: {
+      type: Sequelize.INTEGER,
+    },
     judul_web: {
       type: Sequelize.TEXT,
     },
@@ -189,6 +198,9 @@ const SettingWeb = db.define(
     },
     logo_ceo: {
       type: Sequelize.TEXT,
+    },
+    logo_ceo_filename: {
+      type: Sequelize.STRING,
     },
     sejarah: {
       type: Sequelize.TEXT,

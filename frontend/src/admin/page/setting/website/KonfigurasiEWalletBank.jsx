@@ -69,7 +69,7 @@ const KonfigurasiEWalletBank = () => {
       </div>
       <div className="bg-white dark:bg-[#2d2d2e] rounded-xl shadow-md p-5">
         <form onSubmit={saveMutasiEWallet} className="flex flex-col gap-y-4">
-          <div className="grid grid-cols-2 gap-x-8">
+          <div className="flex flex-row gap-x-8">
             <div className="grid grid-cols-5 gap-y-4 gap-x-2">
               <label
                 htmlFor="ovoAdmin"
@@ -124,46 +124,52 @@ const KonfigurasiEWalletBank = () => {
                 className="col-span-3 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
               />
             </div>
-            <div className="grid grid-cols-5 gap-y-4 gap-x-2">
-              <label
-                htmlFor="danaAdmin"
-                className="col-span-2 whitespace-nowrap flex flex-row mt-2 text-black dark:text-white"
-              >
-                DANA ADMIN
-              </label>
-              <input
-                id="danaAdmin"
-                type="text"
-                value={danaAdmin}
-                onChange={(e) => setDanaAdmin(e.target.value)}
-                className="col-span-3 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
-              />
-              <label
-                htmlFor="shoopePayAdmin"
-                className="col-span-2 whitespace-nowrap flex flex-row mt-2 text-black dark:text-white"
-              >
-                SHOOPEPAY ADMIN
-              </label>
-              <input
-                id="shoopePayAdmin"
-                type="text"
-                value={shoopePayAdmin}
-                onChange={(e) => setShoopePayAdmin(e.target.value)}
-                className="col-span-3 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
-              />
-              <label
-                htmlFor="bcaAdmin"
-                className="col-span-2 whitespace-nowrap flex flex-row mt-2 text-black dark:text-white"
-              >
-                BCA ADMIN
-              </label>
-              <input
-                id="bcaAdmin"
-                type="text"
-                value={bcaAdmin}
-                onChange={(e) => setBcaAdmin(e.target.value)}
-                className="col-span-3 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
-              />
+            <div className="flex flex-col gap-y-4">
+              <div className="grid grid-cols-5 gap-x-2">
+                <label
+                  htmlFor="danaAdmin"
+                  className="col-span-2 whitespace-nowrap flex flex-row mt-2 text-black dark:text-white"
+                >
+                  DANA ADMIN
+                </label>
+                <input
+                  id="danaAdmin"
+                  type="text"
+                  value={danaAdmin}
+                  onChange={(e) => setDanaAdmin(e.target.value)}
+                  className="col-span-3 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                />
+              </div>
+              <div className="grid grid-cols-5 gap-x-2">
+                <label
+                  htmlFor="shoopePayAdmin"
+                  className="col-span-2 whitespace-nowrap flex flex-row mt-2 text-black dark:text-white"
+                >
+                  SHOOPEPAY ADMIN
+                </label>
+                <input
+                  id="shoopePayAdmin"
+                  type="text"
+                  value={shoopePayAdmin}
+                  onChange={(e) => setShoopePayAdmin(e.target.value)}
+                  className="col-span-3 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                />
+              </div>
+              <div className="grid grid-cols-5 gap-x-2">
+                <label
+                  htmlFor="bcaAdmin"
+                  className="col-span-2 whitespace-nowrap flex flex-row mt-2 text-black dark:text-white"
+                >
+                  BCA ADMIN
+                </label>
+                <input
+                  id="bcaAdmin"
+                  type="text"
+                  value={bcaAdmin}
+                  onChange={(e) => setBcaAdmin(e.target.value)}
+                  className="col-span-3 bg-white dark:bg-[#16171a] p-2.5 focus:outline-none focus:ring focus:duration-300 text-black dark:text-white ring-1 ring-zinc-200 dark:ring-zinc-600 rounded-lg"
+                />
+              </div>
             </div>
           </div>
           <div className="flex flex-row gap-3 justify-end mt-2">

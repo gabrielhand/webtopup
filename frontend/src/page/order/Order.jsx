@@ -16,6 +16,7 @@ import QuestionImage from "../../assets/question.png";
 import SaleTagImage from "../../assets/sale-tag.png";
 // import SaleImage from "../../assets/sale.png";
 import Review from "./Review.jsx";
+import ModalKonfirmasiOrder from "./ModalKonfirmasiOrder.jsx";
 
 const Order = () => {
   const { kode } = useParams();
@@ -29,31 +30,36 @@ const Order = () => {
   const [selectedSubkat, setSelectedSubkat] = useState(null);
   const [activeSection, setActiveSection] = useState("detailAkun");
   const [selectedNominal, setSelectedNominal] = useState(null);
+  const [selectedPayment, setSelectedPayment] = useState(null);
   const [price, setPrice] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [kodeVoucher, setKodeVoucher] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
 
   const [userId, setUserId] = useState("");
   const [zone, setZone] = useState("");
-
-  const [selectedPayment, setSelectedPayment] = useState(null);
-
-  const [kodeVoucher, setKodeVoucher] = useState("");
+  const [emailJoki, setEmailJoki] = useState("");
+  const [passwordJoki, setPasswordJoki] = useState("");
+  const [requestJoki, setRequestJoki] = useState("");
+  const [catatanJoki, setCatatanJoki] = useState("");
+  const [nicknameJoki, setNicknameJoki] = useState("");
 
   const [nomor, setNomor] = useState(null);
 
   const modalKonfirmasiOrder = useRef(null);
 
-  const [kategoriLayanan, setKategoriLayanan] = useState([]);
+  const [kategoriLayanan, setKategoriLayanan] = useState({});
   const [nickname, setNickname] = useState("");
-  const [Id, setId] = useState("");
-  const [zoneId, setZoneId] = useState("");
+  const [Id, setId] = useState(null);
+  const [zoneId, setZoneId] = useState(null);
   const [layanan, setLayanan] = useState("");
-  const [harga, setHarga] = useState("");
+  const [harga, setHarga] = useState(null);
+  const [jumlah, setJumlah] = useState(null);
+  const [hargaTotal, setHargaTotal] = useState(null);
   const [payment, setPayment] = useState("");
-  const [nomorWa, setNomorWa] = useState("");
+  const [nomorWa, setNomorWa] = useState(null);
 
   const handleSectionChange = (section) => {
     setActiveSection(section);
@@ -91,6 +97,7 @@ const Order = () => {
       formData.append("uid", userId);
       formData.append("zone", zone);
       formData.append("service", selectedNominal);
+      formData.append("quantity", quantity);
       formData.append("payment_method", selectedPayment);
       formData.append("nomor", nomor);
       formData.append("voucher", kodeVoucher);
@@ -106,7 +113,9 @@ const Order = () => {
       setZoneId(response.data.zone);
       setLayanan(response.data.layanan);
       setHarga(response.data.harga);
-      setPayment(response.data.paymentMethod.name);
+      setJumlah(response.data.quantity);
+      setHargaTotal(response.data.hargaTotal);
+      setPayment(response.data.paymentMethod);
       setNomorWa(response.data.nomor);
       modalKonfirmasiOrder.current.showModal();
       setIsLoading(false);
@@ -171,6 +180,7 @@ const Order = () => {
     placeholder_1: kategori?.data?.placeholder_1,
     placeholder_2: kategori?.data?.placeholder_2,
     ket_id: kategori?.data?.ket_id,
+    tipe: kategori?.data?.tipe?.name,
   };
 
   return (
@@ -185,7 +195,7 @@ const Order = () => {
         </div>
       </div>
       {isLoadingKat ? (
-        <div className="rounded-md px-3 py-1.5 border border-[#4169e1] text-black dark:text-white">
+        <div className="rounded-md lg:mx-16 md:mx-10 mx-2 px-3 py-1.5 border border-[#4169e1] text-black dark:text-white">
           Loading...
         </div>
       ) : (
@@ -337,6 +347,16 @@ const Order = () => {
                   setUserId={setUserId}
                   zone={zone}
                   setZone={setZone}
+                  emailJoki={emailJoki}
+                  setEmailJoki={setEmailJoki}
+                  passwordJoki={passwordJoki}
+                  setPasswordJoki={setPasswordJoki}
+                  requestJoki={requestJoki}
+                  setRequestJoki={setRequestJoki}
+                  catatanJoki={catatanJoki}
+                  setCatatanJoki={setCatatanJoki}
+                  nicknameJoki={nicknameJoki}
+                  setNicknameJoki={setNicknameJoki}
                   detailAkun={ForDetailAkun}
                 />
                 <Quantity quantity={quantity} setQuantity={setQuantity} />
@@ -375,83 +395,22 @@ const Order = () => {
           </div>
         </div>
       )}
-      <dialog
-        id="modal_confirm_order"
-        className="modal"
-        ref={modalKonfirmasiOrder}
-      >
-        <div className="relative flex flex-col gap-4 p-4 rounded-xl w-6/12 overflow-hidden max-w-5xl bg-white dark:bg-[#161721]">
-          <div className="flex flex-col items-center">
-            <h3 className="font-semibold text-xl text-black dark:text-white">
-              Konfirmasi Pesanan Kamu
-            </h3>
-            <p className="text-black dark:text-white font-light">
-              Pastikan semua sudah sesuai ya!
-            </p>
-            <div className="mt-4 flex flex-col gap-2 items-center">
-              <img
-                src={kategoriLayanan.thumbnail}
-                alt={`Thumbnail-${kategoriLayanan.nama}`}
-                className="w-20 rounded-sm"
-              />
-              <p className="text-black dark:text-white font-light">
-                {kategoriLayanan.nama}
-              </p>
-            </div>
-          </div>
-          <div className="flex flex-col gap-2 p-3 rounded-lg bg-zinc-300 dark:bg-black">
-            <div className="flex flex-row justify-between">
-              <p className="font-medium text-black dark:text-white">Nickname</p>
-              <p className="text-black dark:text-white">{nickname}</p>
-            </div>
-            <div className="flex flex-row justify-between">
-              <p className="font-medium text-black dark:text-white">ID</p>
-              <p className="text-black dark:text-white">{Id}</p>
-            </div>
-            <div className="flex flex-row justify-between">
-              <p className="font-medium text-black dark:text-white">Server</p>
-              <p className="text-black dark:text-white">{zoneId}</p>
-            </div>
-            <div className="flex flex-row justify-between">
-              <p className="font-medium text-black dark:text-white">Layanan</p>
-              <p className="text-black dark:text-white">{layanan}</p>
-            </div>
-          </div>
-          <div className="flex flex-col gap-2 p-3 rounded-lg bg-zinc-300 dark:bg-black">
-            <div className="flex flex-row justify-between">
-              <p className="font-medium text-black dark:text-white">Payment</p>
-              <p className="text-black dark:text-white">{payment}</p>
-            </div>
-            <div className="flex flex-row justify-between">
-              <p className="font-medium text-black dark:text-white">Harga</p>
-              <p className="text-black dark:text-white">
-                Rp{" "}
-                {harga.toLocaleString("id-ID", {
-                  styles: "currency",
-                  currency: "IDR",
-                })}
-              </p>
-            </div>
-            <div className="flex flex-row justify-between">
-              <p className="font-medium text-black dark:text-white">Kontak</p>
-              <p className="text-black dark:text-white">{nomorWa}</p>
-            </div>
-          </div>
-          <form method="dialog">
-            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-              ✕
-            </button>
-          </form>
-          <div className="flex flex-row justify-end">
-            <button
-              type="button"
-              className="px-10 py-2 bg-blue-500 rounded-lg text-white font-medium"
-            >
-              Pesan Sekarang!
-            </button>
-          </div>
-        </div>
-      </dialog>
+      <ModalKonfirmasiOrder
+        modalRef={modalKonfirmasiOrder}
+        kategoriLayanan={kategoriLayanan ? kategoriLayanan : null}
+        nickname={nickname ? nickname : ""}
+        Id={Id ? Id : null}
+        zoneId={zoneId ? zoneId : null}
+        layanan={layanan ? layanan : ""}
+        service={selectedNominal ? selectedNominal : null}
+        harga={harga ? harga : null}
+        jumlah={jumlah ? jumlah : null}
+        hargaTotal={hargaTotal ? hargaTotal : null}
+        payment={payment ? payment : ""}
+        paymentMethod={selectedPayment ? selectedPayment : null}
+        kodeVoucher={kodeVoucher ? kodeVoucher : null}
+        nomorWa={nomorWa ? nomorWa : null}
+      />
     </div>
   );
 };

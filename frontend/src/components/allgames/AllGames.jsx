@@ -46,10 +46,10 @@ const AllGames = () => {
 
   return (
     <div className="flex flex-col lg:gap-y-6 md:gap-y-6 gap-y-4">
-      <div className="flex flex-row justify-center gap-x-2">
+      <div className="flex flex-row justify-center gap-x-3">
         <div
           id="btn-tipe-Semua"
-          className={`cursor-pointer hover:bg-base-200 bg-white lg:rounded-2xl md:rounded-2xl rounded-xl lg:px-10 lg:py-2 md:py-2 py-1 md:px-6 px-4 shadow-md ${
+          className={`cursor-pointer hover:bg-base-200 bg-white lg:rounded-2xl md:rounded-2xl rounded-lg lg:px-10 lg:py-2 md:py-2 md:px-6 py-2 px-4 shadow-md ${
             selectedTipe === "Semua"
               ? "border-2 border-[#4169e1] dark:bg-[#4169e1]"
               : "border-2 dark:border-[#4169e1]/70 dark:bg-transparent"
@@ -68,7 +68,7 @@ const AllGames = () => {
           <div
             id={`btn-tipe-${tipe.name}`}
             key={tipe.name}
-            className={`cursor-pointer hover:bg-base-200 bg-white lg:rounded-2xl md:rounded-2xl rounded-xl lg:px-10 lg:py-2 md:py-2 py-1 md:px-6 px-4 shadow-md ${
+            className={`cursor-pointer hover:bg-base-200 bg-white lg:rounded-2xl md:rounded-2xl rounded-lg lg:px-10 lg:py-2 md:py-2 md:px-6 py-2 px-4 shadow-md ${
               selectedTipe === tipe.name
                 ? "border-2 border-[#4169e1] dark:bg-[#4169e1]"
                 : "border-2 dark:border-[#4169e1]/70 dark:bg-transparent"
